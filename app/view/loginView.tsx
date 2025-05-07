@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { Colors } from '../styles/colors';
-import imgPrincipal from '../assets/images/img-principal.png';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Colors } from '../../constants/colors';
+import imgPrincipal from '../../assets/image/img-principal.png';
 
 const LoginView = ({ navigation }: any) => {
   return (
@@ -21,7 +21,7 @@ const LoginView = ({ navigation }: any) => {
 
       <TouchableOpacity
         style={[styles.button, styles.secondaryButton]}
-        onPress={() => navigation.navigate('RegisterForm')} // Substitua 'RegisterForm' pelo nome da sua tela de cadastro
+        onPress={() => navigation.navigate('RegisterForm')}
       >
         <Text style={[styles.buttonText, styles.secondaryButtonText]}>Cadastrar</Text>
       </TouchableOpacity>

@@ -1,15 +1,11 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { Colors } from '../styles/colors';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { Colors } from '../../constants/colors';
 
 interface OnboardingItem {
   title: string;
   description: string;
   image?: any;
-}
-
-interface Props {
-  item: OnboardingItem;
 }
 
 export const OnboardingSlide: React.FC<{ item: OnboardingItem }> = ({ item }) => {
