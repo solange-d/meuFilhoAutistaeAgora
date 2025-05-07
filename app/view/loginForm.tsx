@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'; 
-import imgPrincipal from '../assets/images/img-principal.png'; 
-import { Colors } from '../styles/colors'; 
+import Icon from 'react-native-vector-icons/Ionicons';
+import imgPrincipal from '../../assets/image/img-principal.png';
+import { Colors } from '../../constants/colors';
 
 const LoginForm = ({ navigation }: any) => {
   const [emailOrPhone, setEmailOrPhone] = useState('');
@@ -14,13 +14,12 @@ const LoginForm = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
-      {/* Cabeçalho com título e botão de voltar */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-back" size={24} color={Colors.primary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Entrar</Text>
-        <View style={{ width: 24 }} /> {/* Espaço para alinhar o título centralmente */}
+        <View style={{ width: 24 }} />
       </View>
 
       {/* Campo de Email ou Telefone */}
@@ -54,6 +53,8 @@ const LoginForm = ({ navigation }: any) => {
         <Text style={styles.loginButtonText}>Entrar</Text>
       </TouchableOpacity>
 
+      <Text style={styles.centralText}>ou faça login com</Text>
+
       {/* Ícones de Login Social */}
       <View style={styles.socialLoginContainer}>
         <TouchableOpacity style={styles.socialButton}>
@@ -64,6 +65,14 @@ const LoginForm = ({ navigation }: any) => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.socialButton}>
           <Icon name="finger-print" size={24} color={Colors.primary} />
+        </TouchableOpacity>
+      </View>
+
+      {/* Link de Não possui cadastro */}
+      <View style={styles.registerContainer}>
+        <Text style={styles.registerText}>Não possui conta? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('RegisterForm')}>
+          <Text style={styles.registerLink}>Cadastra-se</Text>
         </TouchableOpacity>
       </View>
 
@@ -102,18 +111,35 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 16,
     marginBottom: 16,
-    color: Colors.textPrimary,
   },
   forgotPasswordText: {
-    color: Colors.primary,
     textAlign: 'right',
     marginBottom: 24,
+  },
+  centralText: {
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  registerText: {
+    fontSize: 14,
+  },
+  registerLink: {
+    color: Colors.primary,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   loginButton: {
     backgroundColor: Colors.primary,
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: 'center',
+    marginTop: 35,
     marginBottom: 24,
   },
   loginButtonText: {
