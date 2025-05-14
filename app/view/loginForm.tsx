@@ -9,7 +9,7 @@ const LoginForm = ({ navigation }: any) => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    // Lógica de autenticação aqui
+    navigation.replace('BottomTabs');
   };
 
   return (
