@@ -8,6 +8,7 @@ import LoginView from './view/loginView';
 import LoginForm from './view/loginForm';
 import RegisterForm from './view/registerForm';
 import BottomTabs from './navigation/bottomTabs';
+import EditProfile from './view/editProfileView';
 
 const Stack = createStackNavigator();
 
@@ -19,6 +20,7 @@ export default function App() {
     <Stack.Screen name="LoginForm" component={LoginForm} />
     <Stack.Screen name="RegisterForm" component={RegisterForm} />
     <Stack.Screen name="BottomTabs" component={BottomTabs} />
+    <Stack.Screen name="EditProfile" component={EditProfile} />
   </Stack.Navigator>
   
   );

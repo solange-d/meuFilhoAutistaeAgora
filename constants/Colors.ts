@@ -9,5 +9,6 @@ export const Colors = {
     success: '#12A454',
     danger: '#E83F5B',
     warning: '#F1C40F',
+    border: '#cccccc',
   };
   
