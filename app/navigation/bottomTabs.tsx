@@ -31,7 +31,7 @@ export default function BottomTabs() {
           position: 'absolute',
           height: 75,
           borderTopWidth: 0,
-          backgroundColor: 'transparent', // para vermos a View personalizada
+          backgroundColor: 'transparent',
           elevation: 0,
         },
         tabBarBackground: () => (
