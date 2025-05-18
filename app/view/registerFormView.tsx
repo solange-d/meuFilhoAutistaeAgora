@@ -23,7 +23,7 @@ const RegisterForm = ({ navigation }: any) => {
           <Icon name="arrow-back" size={24} color={Colors.primary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Cadastrar</Text>
-        <View style={{ width: 24 }} /> {/* Espaço para alinhar o título centralmente */}
+        <View style={{ width: 24 }} />
       </View>
 
       {/* Campos de entrada */}

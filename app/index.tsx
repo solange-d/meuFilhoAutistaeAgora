@@ -5,11 +5,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import OnboardingView from './view/onboardingView';
 import LoginView from './view/loginView';
-import LoginForm from './view/loginForm';
-import RegisterForm from './view/registerForm';
+import LoginForm from './view/loginFormView';
+import RegisterForm from './view/registerFormView';
 import BottomTabs from './navigation/bottomTabs';
 import EditProfile from './view/editProfileView';
-
+import SettingsView from './view/settingsView';
+import ChangePassword from './view/changePasswordView';
+import PrivacyPolicy from './view/privacyPolicyView'; 
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -21,6 +23,9 @@ export default function App() {
     <Stack.Screen name="RegisterForm" component={RegisterForm} />
     <Stack.Screen name="BottomTabs" component={BottomTabs} />
     <Stack.Screen name="EditProfile" component={EditProfile} />
+    <Stack.Screen name="SettingsView" component={SettingsView} />
+    <Stack.Screen name="ChangePassword" component={ChangePassword} />
+    <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
   </Stack.Navigator>
   
   );

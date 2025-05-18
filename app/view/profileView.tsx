@@ -9,8 +9,8 @@ const ProfileView = ({ navigation }: any) => {
 
   const menuItems = [
     { label: 'Editar Perfil', icon: 'pencil-outline', screen: 'EditProfile' },
-    { label: 'Configurações', icon: 'settings-outline', screen: 'Configurações' },
-    { label: 'Políticas de Privacidade', icon: 'lock-closed-outline', screen: 'PoliticasPrivacidade' },
+    { label: 'Configurações', icon: 'settings-outline', screen: 'SettingsView' },
+    { label: 'Políticas de Privacidade', icon: 'lock-closed-outline', screen: 'PrivacyPolicy' },
     { label: 'Sair', icon: 'exit-outline', action: () => navigation.replace('Login') },
   ];
 
