@@ -7,7 +7,7 @@ import { Colors } from '../../constants/colors';
 
 const HomeView = ({ navigation }: any) => {
   const [greeting, setGreeting] = useState('');
-  const userName = 'Fulano'; // Substitua pelo nome do usuário obtido do perfil
+  const userName = 'Fulano'; // Substituir pelo nome do usuário obtido do perfil
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -38,7 +38,7 @@ const HomeView = ({ navigation }: any) => {
           <TouchableOpacity onPress={() => navigation.navigate('Notificações')}>
             <Icon name="notifications-outline" size={24} color={Colors.primary} style={styles.icon} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('Configurações')}>
+          <TouchableOpacity onPress={() => navigation.navigate('SettingsView')}>
             <Icon name="settings-outline" size={24} color={Colors.primary} style={styles.icon} />
           </TouchableOpacity>
         </View>
@@ -73,7 +73,7 @@ const HomeView = ({ navigation }: any) => {
     <TouchableOpacity style={styles.cardButtonItem} onPress={() => navigation.navigate('Documentos')}>
       <Text style={styles.cardButtonItemText}>Documentos</Text>
     </TouchableOpacity>
-    <TouchableOpacity style={styles.cardButtonItem} onPress={() => navigation.navigate('Rede de Apoio')}>
+    <TouchableOpacity style={styles.cardButtonItem} onPress={() => navigation.navigate('SuportNetwork')}>
       <Text style={styles.cardButtonItemText}>Rede de Apoio</Text>
     </TouchableOpacity>
   </View>
