@@ -12,6 +12,9 @@ import EditProfile from './view/editProfileView';
 import SettingsView from './view/settingsView';
 import ChangePassword from './view/changePasswordView';
 import PrivacyPolicy from './view/privacyPolicyView'; 
+import SuportNetwork from './view/suportNetworkView'; 
+import NewTopic from './view/newTopicView';
+import TopicDetail from './view/topicDetailView';
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -26,6 +29,9 @@ export default function App() {
     <Stack.Screen name="SettingsView" component={SettingsView} />
     <Stack.Screen name="ChangePassword" component={ChangePassword} />
     <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+    <Stack.Screen name="SuportNetwork" component={SuportNetwork} />
+    <Stack.Screen name="NewTopic" component={NewTopic} />
+    <Stack.Screen name="TopicDetail" component={TopicDetail} />
   </Stack.Navigator>
   
   );
