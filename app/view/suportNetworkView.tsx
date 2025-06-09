@@ -1,125 +1,126 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/colors';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList, Topic } from '../interface/topic';
 
-interface Topic {
-  id: string;
-  title: string;
-  author: string;
-  createdAt: string;
-  commentsCount: number;
-  likesCount: number;
-}
+const SuportNetworkView = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const [search, setSearch] = useState('');
+  const [topics, setTopics] = useState<Topic[]>([
+    { id: '1', title: 'Como lidar com crises sensoriais?', description: 'Descrição do tópico 1', likes: 12, comments: [] },
+    { id: '2', title: 'Dicas de rotina para crianças autistas', description: 'Descrição do tópico 2', likes: 7, comments: [] },
+    { id: '3', title: 'Direitos garantidos por lei', description: 'Descrição do tópico 3', likes: 15, comments: [] },
+  ]);
 
-const SupportNetworkView = ({ navigation }: any) => {
-  const [topics, setTopics] = useState<Topic[]>([]);
-  const [page, setPage] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-
-  useEffect(() => {
-    fetchTopics();
-  }, []);
-
-  const fetchTopics = async () => {
-    if (loading || !hasMore) return;
-    setLoading(true);
-    try {
-      // Simulação de chamada à API
-      const response = await fetch(`https://api.exemplo.com/topics?page=${page}&limit=10`);
-      const data = await response.json();
-      setTopics(prev => [...prev, ...data.topics]);
-      setHasMore(data.topics.length === 10); // Supondo que a API retorna 10 tópicos por página
-      setPage(prev => prev + 1);
-    } catch (error) {
-      console.error('Erro ao buscar tópicos:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const filteredTopics = topics.filter((t) =>
+    t.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   const renderTopic = ({ item }: { item: Topic }) => (
     <TouchableOpacity
-      style={styles.topicContainer}
-      onPress={() => navigation.navigate('TopicDetail', { topicId: item.id })}
-    >
+      style={styles.topicCard}
+      onPress={() => navigation.navigate('TopicDetail', { topic: item })}>
       <Text style={styles.topicTitle}>{item.title}</Text>
-      <Text style={styles.topicMeta}>
-        Por {item.author} em {new Date(item.createdAt).toLocaleDateString()}
-      </Text>
-      <Text style={styles.topicStats}>
-        {item.commentsCount} comentários · {item.likesCount} curtidas
-      </Text>
+      <View style={styles.likes}>
+        <Icon name="heart" size={16} color={Colors.textPrimary} />
+        <Text style={styles.likesText}>{item.likes}</Text>
+      </View>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={topics}
-        keyExtractor={(item) => item.id}
-        renderItem={renderTopic}
-        onEndReached={fetchTopics}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={loading ? <ActivityIndicator size="large" color={Colors.primary} /> : null}
+      <Text style={styles.title}>Rede de Apoio</Text>
+
+      <TextInput
+        style={styles.search}
+        placeholder="Pesquisar tópicos..."
+        placeholderTextColor="#999"
+        value={search}
+        onChangeText={setSearch}
       />
-      <TouchableOpacity
-        style={styles.newTopicButton}
-        onPress={() => navigation.navigate('NewTopic')}
-      >
-        <Text style={styles.newTopicButtonText}>Novo Tópico</Text>
+
+      <FlatList
+        data={filteredTopics}
+        renderItem={renderTopic}
+        keyExtractor={(item) => item.id}
+        style={styles.list}
+      />
+
+      <TouchableOpacity 
+        style={styles.newButton} 
+        onPress={() => navigation.navigate('NewTopic', { setTopics })}>
+        <Icon name="add-circle" size={24} color="#fff" />
+        <Text style={styles.newButtonText}>Novo Tópico</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
-export default SupportNetworkView;
+export default SuportNetworkView;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
+    padding: 20,
   },
-  topicContainer: {
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: Colors.primary,
+    marginBottom: 16,
+  },
+  search: {
+    backgroundColor: '#eee',
+    borderRadius: 8,
+    padding: 10,
+    fontSize: 16,
+    marginBottom: 16,
+    color: '#000',
+  },
+  list: {
+    flex: 1,
+  },
+  topicCard: {
+    backgroundColor: Colors.primary,
     padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    borderRadius: 12,
+    marginBottom: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   topicTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: Colors.textPrimary,
   },
-  topicMeta: {
-    fontSize: 14,
-    color: Colors.textSecondary,
-    marginTop: 4,
+  likes: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  topicStats: {
+  likesText: {
+    marginLeft: 6,
+    color: Colors.textPrimary,
     fontSize: 14,
-    color: Colors.textSecondary,
-    marginTop: 4,
   },
-  newTopicButton: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
+  newButton: {
     backgroundColor: Colors.primary,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 25,
-    elevation: 2,
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
   },
-  newTopicButtonText: {
-    color: Colors.secondary,
+  newButtonText: {
+    color: '#fff',
+    marginLeft: 8,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
 });

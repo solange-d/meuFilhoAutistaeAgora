@@ -1,111 +1,60 @@
-
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/colors';
+import { RouteProp } from '@react-navigation/native';
+import { RootStackParamList, Topic } from '../interface/topic';
 
-interface Comment {
-  id: string;
-  author: string;
-  content: string;
-  createdAt: string;
-  likesCount: number;
-}
+type TopicDetailProps = {
+  route: RouteProp<RootStackParamList, 'TopicDetail'>;
+};
 
-const TopicDetailView = ({ route }: any) => {
-  const { topicId } = route.params;
-  const [topic, setTopic] = useState<any>(null);
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [newComment, setNewComment] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+const TopicDetailView: React.FC<TopicDetailProps> = ({ route }) => {
+  const { topic } = route.params;
+  const [comments, setComments] = useState<string[]>(topic.comments || []);
+  const [newComment, setNewComment] = useState('');
+  const [likes, setLikes] = useState(topic.likes);
 
-  useEffect(() => {
-    fetchTopicDetails();
-  }, []);
-
-  const fetchTopicDetails = async () => {
-    setLoading(true);
-    try {
-      // Simulação de chamada à API
-      const response = await fetch(`https://api.exemplo.com/topics/${topicId}`);
-      const data = await response.json();
-      setTopic(data.topic);
-      setComments(data.comments);
-    } catch (error) {
-      console.error('Erro ao buscar detalhes do tópico:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleAddComment = async () => {
-    if (!newComment.trim()) return;
-    try {
-      // Simulação de chamada à API
-      const response = await fetch(`https://api.exemplo.com/topics/${topicId}/comments`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: newComment }),
-      });
-      const data = await response.json();
-      setComments(prev => [data.comment, ...prev]);
+  const handleAddComment = () => {
+    if (newComment.trim()) {
+      setComments([...comments, newComment.trim()]);
       setNewComment('');
-    } catch (error) {
-      console.error('Erro ao adicionar comentário:', error);
     }
   };
-
-  const renderComment = ({ item }: { item: Comment }) => (
-    <View style={styles.commentContainer}>
-      <Text style={styles.commentAuthor}>{item.author}</Text>
-      <Text style={styles.commentContent}>{item.content}</Text>
-      <Text style={styles.commentMeta}>
-        {new Date(item.createdAt).toLocaleDateString()} · {item.likesCount} curtidas
-      </Text>
-    </View>
-  );
-
-  if (loading || !topic) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={Colors.primary} />
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
-      <View style={styles.topicHeader}>
-        <Text style={styles.topicTitle}>{topic.title}</Text>
-        <Text style={styles.topicMeta}>
-          Por {topic.author} em {new Date(topic.createdAt).toLocaleDateString()}
-        </Text>
-        <Text style={styles.topicContent}>{topic.content}</Text>
+      <Text style={styles.title}>{topic.title}</Text>
+      <View style={styles.descriptionBox}>
+        <Text style={styles.description}>{topic.description}</Text>
       </View>
-      <FlatList
-        data={comments}
-        keyExtractor={(item) => item.id}
-        renderItem={renderComment}
-        contentContainerStyle={styles.commentsList}
-      />
-      <View style={styles.commentInputContainer}>
-        <TextInput
-          style={styles.commentInput}
-          placeholder="Escreva um comentário..."
-          value={newComment}
-          onChangeText={setNewComment}
-        />
-        <TouchableOpacity style={styles.commentButton} onPress={handleAddComment}>
-          <Text style={styles.commentButtonText}>Enviar</Text>
+
+
+      <View style={styles.likeContainer}>
+        <TouchableOpacity onPress={() => setLikes(likes + 1)} style={styles.likeButton}>
+          <Icon name="heart" size={25} color={Colors.danger} />
+          <Text style={styles.likeText}>{likes} curtidas</Text>
         </TouchableOpacity>
       </View>
+
+      <FlatList
+        data={comments}
+        renderItem={({ item }) => <Text style={styles.comment}>{item}</Text>}
+        keyExtractor={(_, index) => index.toString()}
+        style={styles.commentList}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Adicionar comentário..."
+        placeholderTextColor="#999"
+        value={newComment}
+        onChangeText={setNewComment}
+      />
+
+      <TouchableOpacity style={styles.commentButton} onPress={handleAddComment}>
+        <Text style={styles.commentButtonText}>Comentar</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -116,79 +65,70 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
+    padding: 20,
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.textPrimary,
+    marginBottom: 10,
+  },
+  descriptionBox: {
+  backgroundColor: '#fff',
+  padding: 25,
+  borderRadius: 8,
+  marginBottom: 20,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 2,
+  elevation: 2, 
+},
+
+  description: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 20,
+  },
+  likeContainer: {
+    marginBottom: 20,
+  },
+  likeButton: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-  topicHeader: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
-  topicTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  likeText: {
+    marginLeft: 6,
     color: Colors.textPrimary,
-  },
-  topicMeta: {
-    fontSize: 14,
-    color: Colors.textSecondary,
-    marginTop: 4,
-  },
-  topicContent: {
     fontSize: 16,
-    color: Colors.textPrimary,
-    marginTop: 12,
   },
-  commentsList: {
-    padding: 16,
+  commentList: {
+    marginBottom: 20,
   },
-  commentContainer: {
-    marginBottom: 16,
-  },
-  commentAuthor: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: Colors.textPrimary,
-  },
-  commentContent: {
-    fontSize: 16,
-    color: Colors.textPrimary,
-    marginTop: 4,
-  },
-  commentMeta: {
-    fontSize: 12,
-    color: Colors.textSecondary,
-    marginTop: 4,
-  },
-  commentInputContainer: {
-    flexDirection: 'row',
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
-    backgroundColor: Colors.backgroundSecondary,
-  },
-  commentInput: {
-    flex: 1,
-    height: 40,
-    borderColor: Colors.border,
-    borderWidth: 1,
+  comment: {
+    backgroundColor: '#eee',
+    padding: 10,
     borderRadius: 8,
-    paddingHorizontal: 12,
-    backgroundColor: '#fff',
+    marginBottom: 8,
+    color: '#000',
+  },
+  input: {
+    backgroundColor: '#eee',
+    borderRadius: 8,
+    padding: 10,
+    fontSize: 16,
+    color: '#000',
   },
   commentButton: {
-    marginLeft: 8,
     backgroundColor: Colors.primary,
-    paddingHorizontal: 16,
-    justifyContent: 'center',
+    padding: 14,
     borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
   },
   commentButtonText: {
-    color: Colors.secondary,
-    fontSize: 14,
-    fontWeight: '600',
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
