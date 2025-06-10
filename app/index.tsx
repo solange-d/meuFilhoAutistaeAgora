@@ -14,6 +14,7 @@ import RegisterForm from './view/registerFormView';
 import SettingsView from './view/settingsView';
 import SuportNetwork from './view/suportNetworkView';
 import TopicDetail from './view/topicDetailView';
+import RightsBenefits from './view/rightsBenefitsView';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -30,6 +31,7 @@ export default function App() {
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
       <Stack.Screen name="SuportNetwork" component={SuportNetwork} />
+      <Stack.Screen name="RightsBenefits" component={RightsBenefits} />
       <Stack.Screen name="NewTopic" component={NewTopic} />
       <Stack.Screen name="TopicDetail" component={TopicDetail} />
     </Stack.Navigator>

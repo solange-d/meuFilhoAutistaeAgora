@@ -71,10 +71,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: Colors.textPrimary,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   descriptionBox: {
-  backgroundColor: '#fff',
+  backgroundColor: Colors.backgroundSecondary,
   padding: 25,
   borderRadius: 8,
   marginBottom: 20,
