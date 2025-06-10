@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import imgPrincipal from '../../assets/image/img-principal.png';
 import imgUsuario from '../../assets/image/img-usuario.png';
@@ -16,11 +23,45 @@ const HomeView = ({ navigation }: any) => {
     else setGreeting(' Boa noite');
   }, []);
 
-  // Data de vencimento do documento (exemplo: 30 de maio de 2025)
-  const dueDate = new Date('2025-05-30T00:00:00');
+  // Data de vencimento do documento
+  const dueDate = new Date('2025-03-09T00:00:00');
   const currentDate = new Date();
   const timeDiff = dueDate.getTime() - currentDate.getTime();
   const daysUntilDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+ const renderDocumentStatus = () => {
+  const absoluteDays = Math.abs(daysUntilDue);
+  
+  return (
+    <>
+      <View style={styles.daysContainer}>
+        <Text style={styles.daysNumber}>{absoluteDays}</Text>
+        <Text style={styles.daysLabel}>
+          {absoluteDays === 1 ? 'dia' : 'dias'}
+        </Text>
+      </View>
+
+      {daysUntilDue > 0 && (
+        <Text style={styles.cardDescription}>
+          Faltantes para o vencimento da carteirinha de identificação.
+        </Text>
+      )}
+
+      {daysUntilDue === 0 && (
+        <Text style={styles.cardDescription}>
+          Seu documento <Text style={{ fontWeight: 'bold' }}>vence hoje</Text>.
+        </Text>
+      )}
+
+      {daysUntilDue < 0 && (
+        <Text style={styles.cardDescription}>
+          Que sua carteirinha de identificação{' '}
+          <Text style={{ fontWeight: 'bold' }}>venceu</Text>.
+        </Text>
+      )}
+    </>
+  );
+};
 
   return (
     <ScrollView style={styles.container}>
@@ -31,53 +72,67 @@ const HomeView = ({ navigation }: any) => {
           <Text style={styles.greeting}>
             Olá, {greeting}
             {'\n'}
-          <Text style={styles.userName}>{userName}</Text>
-        </Text>
+            <Text style={styles.userName}>{userName}</Text>
+          </Text>
         </View>
         <View style={styles.icons}>
           <TouchableOpacity onPress={() => navigation.navigate('Notificações')}>
-            <Icon name="notifications-outline" size={24} color={Colors.primary} style={styles.icon} />
+            <Icon
+              name="notifications-outline"
+              size={24}
+              color={Colors.primary}
+              style={styles.icon}
+            />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('SettingsView')}>
-            <Icon name="settings-outline" size={24} color={Colors.primary} style={styles.icon} />
+            <Icon
+              name="settings-outline"
+              size={24}
+              color={Colors.primary}
+              style={styles.icon}
+            />
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Card de Contagem Regressiva */}
       <View style={styles.card}>
-  <View style={styles.daysContainer}>
-    <Text style={styles.daysNumber}>{daysUntilDue}</Text>
-    <Text style={styles.daysLabel}>{daysUntilDue === 1 ? 'dia' : 'dias'}</Text>
-  </View>
-  <Text style={styles.cardDescription}>
-    Faltantes para o vencimento da carteirinha de identificação.
-  </Text>
-  <TouchableOpacity
-    style={styles.cardButton}
-    onPress={() => navigation.navigate('Documentos')}
-  >
-    <Text style={styles.cardButtonText}>Acessar Documentos</Text>
-  </TouchableOpacity>
-</View>
+        {renderDocumentStatus()}
+        <TouchableOpacity
+          style={styles.cardButton}
+          onPress={() => navigation.navigate('Documentos')}
+        >
+          <Text style={styles.cardButtonText}>Acessar Documentos</Text>
+        </TouchableOpacity>
+      </View>
 
-
-  {/* Botões Estilo Card */}
-  <View style={styles.buttonGrid}>
-    <TouchableOpacity style={styles.cardButtonItem} onPress={() => navigation.navigate('Informações e Orientações')}>
-      <Text style={styles.cardButtonItemText}>Informações e Orientações</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.cardButtonItem} onPress={() => navigation.navigate('Direitos e Benefícios')}>
-      <Text style={styles.cardButtonItemText}>Direitos e Benefícios</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.cardButtonItem} onPress={() => navigation.navigate('Documentos')}>
-      <Text style={styles.cardButtonItemText}>Documentos</Text>
-    </TouchableOpacity>
-    <TouchableOpacity style={styles.cardButtonItem} onPress={() => navigation.navigate('SuportNetwork')}>
-      <Text style={styles.cardButtonItemText}>Rede de Apoio</Text>
-    </TouchableOpacity>
-  </View>
-
+      {/* Botões Estilo Card */}
+      <View style={styles.buttonGrid}>
+        <TouchableOpacity
+          style={styles.cardButtonItem}
+          onPress={() => navigation.navigate('Informações e Orientações')}
+        >
+          <Text style={styles.cardButtonItemText}>Informações e Orientações</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.cardButtonItem}
+          onPress={() => navigation.navigate('RightsBenefits')}
+        >
+          <Text style={styles.cardButtonItemText}>Direitos e Benefícios</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.cardButtonItem}
+          onPress={() => navigation.navigate('Documentos')}
+        >
+          <Text style={styles.cardButtonItemText}>Documentos</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.cardButtonItem}
+          onPress={() => navigation.navigate('SuportNetwork')}
+        >
+          <Text style={styles.cardButtonItemText}>Rede de Apoio</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Mini Logo do App */}
       <View style={styles.footer}>

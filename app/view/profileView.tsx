@@ -1,17 +1,23 @@
-import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import imgUsuario from '../../assets/image/img-usuario.png';
 import { Colors } from '../../constants/colors';
 
 const ProfileView = ({ navigation }: any) => {
+  const [modalVisible, setModalVisible] = useState(false);
   const userName = 'Fulano'; // Substitua por nome real do usuário
+
+  const handleLogout = () => {
+    setModalVisible(false);
+    navigation.replace('Login'); // Redireciona para tela de login
+  };
 
   const menuItems = [
     { label: 'Editar Perfil', icon: 'pencil-outline', screen: 'EditProfile' },
     { label: 'Configurações', icon: 'settings-outline', screen: 'SettingsView' },
     { label: 'Políticas de Privacidade', icon: 'lock-closed-outline', screen: 'PrivacyPolicy' },
-    { label: 'Sair', icon: 'exit-outline', action: () => navigation.replace('Login') },
+    { label: 'Sair', icon: 'exit-outline', action: () => setModalVisible(true) },
   ];
 
   return (
@@ -35,6 +41,35 @@ const ProfileView = ({ navigation }: any) => {
           </TouchableOpacity>
         ))}
       </View>
+
+      {/* Modal de Confirmação de Saída */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Deseja sair?</Text>
+            <Text style={styles.modalText}>Você realmente quer sair do aplicativo?</Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                style={[styles.button, styles.cancelButton]}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={styles.buttonText}>Não</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.confirmButton]}
+                onPress={handleLogout}
+              >
+                <Text style={styles.buttonText}>Sim</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -58,7 +93,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    marginBottom: 10,  
+    marginBottom: 10,
   },
   userName: {
     fontSize: 20,
@@ -95,5 +130,52 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.textPrimary,
     flex: 1,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: Colors.textPrimary,
+  },
+  modalText: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+    color: Colors.textSecondary,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  button: {
+    flex: 1,
+    paddingVertical: 10,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: Colors.border,
+  },
+  confirmButton: {
+    backgroundColor: Colors.primary,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });

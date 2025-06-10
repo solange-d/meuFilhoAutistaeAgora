@@ -73,11 +73,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: Colors.primary,
+    color: Colors.textPrimary,
     marginBottom: 20,
   },
   input: {
-    backgroundColor: '#eee',
+    backgroundColor: Colors.backgroundSecondary,
     borderRadius: 8,
     padding: 12,
     fontSize: 16,

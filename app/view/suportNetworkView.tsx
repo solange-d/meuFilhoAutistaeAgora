@@ -15,9 +15,17 @@ const SuportNetworkView = () => {
     { id: '3', title: 'Direitos garantidos por lei', description: 'Descrição do tópico 3', likes: 15, comments: [] },
   ]);
 
-  const filteredTopics = topics.filter((t) =>
-    t.title.toLowerCase().includes(search.toLowerCase())
-  );
+  const [filter, setFilter] = useState<'recent' | 'popular' | 'alphabetical'>('recent');
+
+
+  const filteredTopics = topics
+  .filter((t) => t.title.toLowerCase().includes(search.toLowerCase()))
+  .sort((a, b) => {
+    if (filter === 'popular') return b.likes - a.likes;
+    if (filter === 'alphabetical') return a.title.localeCompare(b.title);
+    return 0;
+  });
+
 
   const renderTopic = ({ item }: { item: Topic }) => (
     <TouchableOpacity
@@ -42,6 +50,32 @@ const SuportNetworkView = () => {
         value={search}
         onChangeText={setSearch}
       />
+
+      <View style={styles.filterContainer}>
+        <TouchableOpacity
+          style={[styles.filterButton, filter === 'recent' && styles.activeFilter]}
+          onPress={() => setFilter('recent')}>
+          <Text style={[styles.filterText, filter === 'recent' && styles.activeFilterText]}>
+            Mais recentes
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.filterButton, filter === 'popular' && styles.activeFilter]}
+          onPress={() => setFilter('popular')}>
+          <Text style={[styles.filterText, filter === 'popular' && styles.activeFilterText]}>
+            Mais populares
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.filterButton, filter === 'alphabetical' && styles.activeFilter]}
+          onPress={() => setFilter('alphabetical')}>
+          <Text style={[styles.filterText, filter === 'alphabetical' && styles.activeFilterText]}>
+            A-Z
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       <FlatList
         data={filteredTopics}
@@ -71,15 +105,15 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: Colors.primary,
-    marginBottom: 16,
+    color: Colors.textPrimary,
+    marginBottom: 20,
   },
   search: {
     backgroundColor: '#eee',
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
-    marginBottom: 16,
+    marginBottom: 20,
     color: '#000',
   },
   list: {
@@ -123,4 +157,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+
+  filterContainer: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  marginBottom: 20,
+  },
+  filterButton: {
+    flex: 1,
+    paddingVertical: 8,
+    marginHorizontal: 4,
+    backgroundColor: '#eee',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  activeFilter: {
+    backgroundColor: Colors.primary,
+  },
+
+  activeFilterText: {
+    color: '#fff',
+  },
+
+  filterText: {
+    color: '#000',
+    fontWeight: 'bold',
+  },
+
 });
