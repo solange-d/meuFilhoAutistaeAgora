@@ -5,3 +5,17 @@ export type RootStackParamList = {
   NewTopic: { setTopics: React.Dispatch<React.SetStateAction<Topic[]>> };
   TopicDetail: { topic: Topic };
 };
+
+export type CalendarEvent = {
+  id: string;
+  summary: string;
+  location?: string;
+  start: {
+    dateTime?: string;
+    date?: string;
+  };
+  end: {
+    dateTime?: string;
+    date?: string;
+  };
+};

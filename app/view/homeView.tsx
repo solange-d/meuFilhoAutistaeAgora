@@ -49,13 +49,13 @@ const HomeView = ({ navigation }: any) => {
 
       {daysUntilDue === 0 && (
         <Text style={styles.cardDescription}>
-          Seu documento <Text style={{ fontWeight: 'bold' }}>vence hoje</Text>.
+          Seu documento <Text style={{ fontWeight: 'bold' }}>vence hoje</Text>!
         </Text>
       )}
 
       {daysUntilDue < 0 && (
         <Text style={styles.cardDescription}>
-          Que sua carteirinha de identificação{' '}
+          Sua carteirinha de identificação{' '}
           <Text style={{ fontWeight: 'bold' }}>venceu</Text>.
         </Text>
       )}
@@ -100,7 +100,7 @@ const HomeView = ({ navigation }: any) => {
         {renderDocumentStatus()}
         <TouchableOpacity
           style={styles.cardButton}
-          onPress={() => navigation.navigate('Documentos')}
+          onPress={() => navigation.navigate('Documents')}
         >
           <Text style={styles.cardButtonText}>Acessar Documentos</Text>
         </TouchableOpacity>
@@ -110,7 +110,7 @@ const HomeView = ({ navigation }: any) => {
       <View style={styles.buttonGrid}>
         <TouchableOpacity
           style={styles.cardButtonItem}
-          onPress={() => navigation.navigate('Informações e Orientações')}
+          onPress={() => navigation.navigate('informationAndGuildeLiness')}
         >
           <Text style={styles.cardButtonItemText}>Informações e Orientações</Text>
         </TouchableOpacity>
@@ -122,7 +122,7 @@ const HomeView = ({ navigation }: any) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.cardButtonItem}
-          onPress={() => navigation.navigate('Documentos')}
+          onPress={() => navigation.navigate('Documents')}
         >
           <Text style={styles.cardButtonItemText}>Documentos</Text>
         </TouchableOpacity>

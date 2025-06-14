@@ -19,6 +19,8 @@ export type RootStackParamList = {
   PrivacyPolicy: undefined;
   SuportNetwork: undefined;
   RightsBenefits: undefined;
+  Documents: undefined;
+  informationAndGuildeLiness: undefined;
   NewTopic: { setTopics: React.Dispatch<React.SetStateAction<Topic[]>> };
   TopicDetail: { topic: Topic };
 };

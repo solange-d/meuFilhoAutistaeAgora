@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
   cardSummary: {
     fontSize: 15,
-    color: Colors.primary,
+    color: Colors.textSecondary,
     marginBottom: 12,
   },
   button: {
