@@ -15,6 +15,8 @@ import SettingsView from './view/settingsView';
 import SuportNetwork from './view/suportNetworkView';
 import TopicDetail from './view/topicDetailView';
 import RightsBenefits from './view/rightsBenefitsView';
+import Documents from './view/documentsView';
+import informationAndGuildeLiness from './view/informationAndGuildeLinessView';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -32,6 +34,8 @@ export default function App() {
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
       <Stack.Screen name="SuportNetwork" component={SuportNetwork} />
       <Stack.Screen name="RightsBenefits" component={RightsBenefits} />
+      <Stack.Screen name="Documents" component={Documents} />
+      <Stack.Screen name="informationAndGuildeLiness" component={informationAndGuildeLiness} />
       <Stack.Screen name="NewTopic" component={NewTopic} />
       <Stack.Screen name="TopicDetail" component={TopicDetail} />
     </Stack.Navigator>

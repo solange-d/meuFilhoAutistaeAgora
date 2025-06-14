@@ -11,9 +11,11 @@ export type CalendarEvent = {
   summary: string;
   location?: string;
   start: {
-    dateTime: string;
+    dateTime?: string;
+    date?: string;
   };
-  end?: {
-    dateTime: string;
+  end: {
+    dateTime?: string;
+    date?: string;
   };
 };
