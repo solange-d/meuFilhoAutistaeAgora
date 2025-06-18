@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { CalendarEvent } from '@/types/types';
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { fetchGoogleCalendarEvents } from '../../Service/googleCalendarService';
-import { Colors } from '@/constants/colors';
-import { CalendarEvent } from '@/types/types';
+import { Colors } from '../../constants/Colors';
 import DistanceSlider from '../components/DistanceSlider';
 
 export default function CalendarView() {

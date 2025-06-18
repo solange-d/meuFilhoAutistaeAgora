@@ -1,18 +1,37 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { useState } from 'react';
+import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Colors } from '../../constants/colors';
 import imgPrincipal from '../../assets/image/img-principal.png';
+import { Colors } from '../../constants/Colors';
 
-const RegisterForm = ({ navigation }: any) => {
+const RegisterFormView = ({ navigation }: any) => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [birthDate, setBirthDate] = useState('');
 
-  const handleRegister = () => {
-    // Lógica de cadastro aqui
+  const handleRegister = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fullName, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        Alert.alert('Erro no Cadastro', data.message || 'Não foi possível se cadastrar.');
+      } else {
+        Alert.alert('Sucesso!', 'Cadastro realizado. Faça o login para continuar.');
+        navigation.navigate('LoginForm');
+      }
+    } catch (error) {
+      Alert.alert('Erro', 'Ocorreu um erro de conexão.');
+    }
   };
 
   return (
@@ -88,8 +107,6 @@ const RegisterForm = ({ navigation }: any) => {
   );
 };
 
-export default RegisterForm;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -149,3 +166,6 @@ const styles = StyleSheet.create({
     height: 100,
   },
 });
+
+export default RegisterFormView;
+

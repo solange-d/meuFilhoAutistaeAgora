@@ -42,7 +42,6 @@
       "ignoreRouteFiles": [
         "**/*.d.ts",
         "**/*.ts",
-        "**/colors.ts",
         "**/onboardingItem.ts",
         "**/onboardingViewModel.ts"
       ]

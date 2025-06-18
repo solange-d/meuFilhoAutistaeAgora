@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { Colors } from '@/constants/colors';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Colors } from '../../constants/Colors';
 
 interface DistanceSliderProps {
   value: number;
