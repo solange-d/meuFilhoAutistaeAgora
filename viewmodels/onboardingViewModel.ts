@@ -1,5 +1,5 @@
-import imgPrincipal from '../../assets/image/img-principal.png';
-import { OnboardingItem } from '../model/onboardingItem';
+import imgPrincipal from '../assets/image/img-principal.png';
+import { OnboardingItem } from '../models/onboardingItem';
 
 export const onboardingData: OnboardingItem[] = [
   {

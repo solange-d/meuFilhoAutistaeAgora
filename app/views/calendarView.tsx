@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-nativ
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
 import { fetchGoogleCalendarEvents } from '../../Service/googleCalendarService';
-import { Colors } from '@/constants/colors';
+import { Colors } from '../../constants/Colors';
 import { CalendarEvent } from '@/types/types';
 import DistanceSlider from '../components/DistanceSlider';
 

@@ -1,15 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Slider from '@react-native-community/slider';
-import { Colors } from '@/constants/colors';
-
-interface DistanceSliderProps {
-  value: number;
-  onValueChange: (value: number) => void;
-  min?: number;
-  max?: number;
-  step?: number;
-}
+import { Colors } from '../../constants/Colors';
+import { DistanceSliderProps } from '../../interfaces/distanceSliderProps';
 
 const DistanceSlider: React.FC<DistanceSliderProps> = ({
   value,

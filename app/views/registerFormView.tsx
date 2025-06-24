@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Colors } from '../../constants/colors';
-import imgPrincipal from '../../assets/image/img-principal.png';
+import { Colors } from '../../constants/Colors';
+import imgPrincipal from '../../assets/images/img-principal.png';
 
 const RegisterForm = ({ navigation }: any) => {
   const [fullName, setFullName] = useState('');

@@ -1,22 +1,22 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import { RootStackParamList } from './interface/topic';
+import { RootStackParamList } from '../interfaces/topic';
 
 import BottomTabs from './navigation/bottomTabs';
-import ChangePassword from './view/changePasswordView';
-import EditProfile from './view/editProfileView';
-import LoginForm from './view/loginFormView';
-import LoginView from './view/loginView';
-import NewTopic from './view/newTopicView';
-import OnboardingView from './view/onboardingView';
-import PrivacyPolicy from './view/privacyPolicyView';
-import RegisterForm from './view/registerFormView';
-import SettingsView from './view/settingsView';
-import SuportNetwork from './view/suportNetworkView';
-import TopicDetail from './view/topicDetailView';
-import RightsBenefits from './view/rightsBenefitsView';
-import Documents from './view/documentsView';
-import informationAndGuildeLiness from './view/informationAndGuildeLinessView';
+import ChangePassword from './views/changePasswordView';
+import Documents from './views/documentsView';
+import EditProfile from './views/editProfileView';
+import informationAndGuildeLiness from './views/informationAndGuildeLinessView';
+import LoginForm from './views/loginFormView';
+import LoginView from './views/loginView';
+import NewTopic from './views/newTopicView';
+import OnboardingView from './views/onboardingView';
+import PrivacyPolicy from './views/privacyPolicyView';
+import RegisterForm from './views/registerFormView';
+import RightsBenefits from './views/rightsBenefitsView';
+import SettingsView from './views/settingsView';
+import SuportNetwork from './views/suportNetworkView';
+import TopicDetail from './views/topicDetailView';
 
 const Stack = createStackNavigator<RootStackParamList>();
 

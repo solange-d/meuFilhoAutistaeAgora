@@ -7,7 +7,7 @@ import {
   Linking,
   ScrollView,
 } from 'react-native';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
 import { rightsLinks } from '../../constants/rightsLinks';
 
 const RightsBenefitsView = () => {

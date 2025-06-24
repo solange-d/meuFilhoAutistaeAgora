@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
 
 const InformationAndGuidelinesView = ({ navigation }: any) => {
   // Exemplo de tópicos e orientações

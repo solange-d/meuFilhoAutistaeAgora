@@ -3,11 +3,11 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import { Colors } from '../../constants/colors';
-import CalendarView from '../view/calendarView';
-import HomeView from '../view/homeView';
-import NotificationView from '../view/notificationsView';
-import ProfileView from '../view/profileView';
+import { Colors } from '../../constants/Colors';
+import CalendarView from '../views/calendarView';
+import HomeView from '../views/homeView';
+import NotificationView from '../views/notificationsView';
+import ProfileView from '../views/profileView';
 
 const Tab = createBottomTabNavigator();
 

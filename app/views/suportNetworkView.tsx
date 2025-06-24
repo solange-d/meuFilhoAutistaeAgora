@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Colors } from '../../constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList, Topic } from '../interface/topic';
+import React, { useState } from 'react';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Colors } from '../../constants/Colors';
+import { RootStackParamList, Topic } from '../../interfaces/topic';
 
 const SuportNetworkView = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();

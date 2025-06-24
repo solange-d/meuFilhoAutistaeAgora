@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import imgUsuario from '../../assets/image/img-usuario.png';
-import { Colors } from '../../constants/colors';
+import imgUsuario from '../../assets/images/img-usuario.png';
+import { Colors } from '../../constants/Colors';
 
 const ProfileView = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(false);
