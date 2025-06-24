@@ -1,12 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { Colors } from '../../constants/colors';
-
-interface OnboardingItem {
-  title: string;
-  description: string;
-  image?: any;
-}
+import { Colors } from '../../constants/Colors';
+import { OnboardingItem } from '../../interfaces/onboardingItem';
 
 export const OnboardingSlide: React.FC<{ item: OnboardingItem }> = ({ item }) => {
   return (
@@ -43,4 +38,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
 });
+
 export default OnboardingSlide;

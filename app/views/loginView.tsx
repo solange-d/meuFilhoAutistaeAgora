@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Colors } from '../../constants/colors';
-import imgPrincipal from '../../assets/image/img-principal.png';
+import { Colors } from '../../constants/Colors';
+import imgPrincipal from '../../assets/images/img-principal.png';
 
 const LoginView = ({ navigation }: any) => {
   return (

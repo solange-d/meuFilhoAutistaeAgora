@@ -1,4 +1,4 @@
-import { Topic } from '../app/interface/topic';
+import { Topic } from '../interfaces/topic';
 
 export type RootStackParamList = {
   SuportNetwork: undefined;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import Swiper from 'react-native-swiper';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
+import { onboardingData } from '../../viewmodels/onboardingViewModel';
 import { OnboardingSlide } from '../components/onboardingSlide';
-import { onboardingData } from '../viewmodel/onboardingViewModel';
 
 const OnboardingView = ({ navigation }: any) => {
   const handleFinish = () => {

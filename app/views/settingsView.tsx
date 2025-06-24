@@ -8,7 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
 
 const SettingsView = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(false);

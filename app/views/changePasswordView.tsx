@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Alert,
 } from 'react-native';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
 
 const ChangePassword = () => {
   const [novaSenha, setNovaSenha] = useState('');

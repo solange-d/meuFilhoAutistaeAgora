@@ -1,51 +1,36 @@
 {
   "expo": {
-    "name": "meuFilhoAutistaeAgora",
+    "name": "Meu Filho é Autista, e Agora?",
     "slug": "meuFilhoAutistaeAgora",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
     "scheme": "meufilhoautistaeagora",
     "userInterfaceStyle": "automatic",
+    "backgroundColor": "#FFFFFF",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "backgroundColor": "#FFFFFF"
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "output": "static"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "image": null,
+          "backgroundColor": "#2D5D8A"
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "router": {
-      "ignoreRouteFiles": [
-        "**/*.d.ts",
-        "**/*.ts",
-        "**/colors.ts",
-        "**/onboardingItem.ts",
-        "**/onboardingViewModel.ts"
-      ]
-    }  
+    }
   }
 }

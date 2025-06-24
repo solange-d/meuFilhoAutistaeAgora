@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, ScrollView, StyleSheet } from 'react-native';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
 
 const PrivacyPolicy = () => {
   return (
