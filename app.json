@@ -42,9 +42,11 @@
     "router": {
       "ignoreRouteFiles": [
         "**/*.d.ts",
-        "**/*.ts",
+        "**/colors.ts",
         "**/onboardingItem.ts",
-        "**/onboardingViewModel.ts"
+        "**/onboardingViewModel.ts",
+        "**/topic.ts", 
+        "**/comment.ts" 
       ]
     }
   }

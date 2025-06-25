@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import imgPrincipal from '../../assets/image/img-principal.png';
 import { Colors } from '../../constants/Colors';
+import imgPrincipal from '../assets/image/img-principal.png';
 
 const RegisterFormView = ({ navigation }: any) => {
   const [fullName, setFullName] = useState('');
@@ -13,7 +13,7 @@ const RegisterFormView = ({ navigation }: any) => {
 
   const handleRegister = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/register', {
+      const response = await fetch('http://192.168.3.19:3000/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

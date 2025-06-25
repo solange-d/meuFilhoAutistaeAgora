@@ -9,9 +9,9 @@ import {
   View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import imgPrincipal from '../../assets/image/img-principal.png';
-import imgUsuario from '../../assets/image/img-usuario.png';
 import { Colors } from '../../constants/Colors';
+import imgPrincipal from '../assets/image/img-principal.png';
+import imgUsuario from '../assets/image/img-usuario.png';
 
 const HomeView = ({ navigation }: any) => {
   const [greeting, setGreeting] = useState('');

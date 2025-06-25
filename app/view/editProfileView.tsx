@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
-import imgUsuario from '../../assets/image/img-usuario.png';
 import { Colors } from '../../constants/Colors';
+import imgUsuario from '../assets/image/img-usuario.png';
 
 const EditProfile = () => {
   const [avatar, setAvatar] = useState<{ uri: string } | null>(null);

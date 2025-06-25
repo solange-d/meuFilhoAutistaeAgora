@@ -2,8 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
 import CalendarView from '../view/calendarView';
 import HomeView from '../view/homeView';
 import NotificationView from '../view/notificationsView';
