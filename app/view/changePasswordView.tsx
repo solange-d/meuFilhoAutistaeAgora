@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {
-  View,
+  Alert,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
+  View,
 } from 'react-native';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
 
 const ChangePassword = () => {
   const [novaSenha, setNovaSenha] = useState('');
