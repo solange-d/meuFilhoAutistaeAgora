@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import imgPrincipal from '../../assets/image/img-principal.png';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
 
 const LoginForm = ({ navigation }: any) => {
   const [emailOrPhone, setEmailOrPhone] = useState('');

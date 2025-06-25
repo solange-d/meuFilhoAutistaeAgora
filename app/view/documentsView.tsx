@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
 
 const DocumentsView = ({ navigation }: any) => {
   const documents = [

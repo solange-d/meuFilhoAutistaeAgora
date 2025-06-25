@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
 import {
-  View,
+  Image,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Image,
-  Platform,
+  View
 } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { launchImageLibrary, ImagePickerResponse } from 'react-native-image-picker';
-import { Colors } from '../../constants/colors';
 import imgUsuario from '../../assets/image/img-usuario.png';
+import { Colors } from '../../constants/Colors';
 
 const EditProfile = () => {
   const [avatar, setAvatar] = useState<{ uri: string } | null>(null);

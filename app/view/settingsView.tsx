@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import {
+  Alert,
   Modal,
-  View,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
+  View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
 
 const SettingsView = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(false);

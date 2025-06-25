@@ -3,7 +3,10 @@ const cors = require('cors');
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { ObjectId } = require('bson');
 require('dotenv').config(); 
+
+const authMiddleware = require('./authMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,10 +30,6 @@ async function connectDB() {
 }
 
 connectDB();
-
-// --- Rotas (Endpoints da API) ---
-
-// Rota para Registrar um Novo Usuário
 app.post('/api/register', async (req, res) => {
   try {
     const { fullName, email, password } = req.body;
@@ -46,11 +45,9 @@ app.post('/api/register', async (req, res) => {
       return res.status(400).json({ message: 'Este e-mail já está em uso.' });
     }
 
-    // Criptografa a senha antes de salvar
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Salva o novo usuário no banco de dados
     const newUser = { fullName, email, password: hashedPassword, createdAt: new Date() };
     await usersCollection.insertOne(newUser);
 
@@ -60,7 +57,6 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
-// Rota para Fazer Login
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -81,11 +77,10 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ message: 'Credenciais inválidas.' });
     }
 
-    // Se o login for bem-sucedido, cria um Token
     const token = jwt.sign(
       { userId: user._id },
       process.env.JWT_SECRET,
-      { expiresIn: '24h' } // Token expira em 24 horas
+      { expiresIn: '24h' } 
     );
 
     res.json({
@@ -94,6 +89,25 @@ app.post('/api/login', async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: 'Erro no servidor ao tentar fazer login.', error });
+  }
+});
+
+app.get('/api/profile', authMiddleware, async (req, res) => {
+  try {
+    const usersCollection = db.collection('users');
+    const user = await usersCollection.findOne(
+      { _id: new ObjectId(req.user.userId) },
+      { projection: { password: 0 } }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado.' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erro no servidor.' });
   }
 });
 
@@ -110,8 +124,6 @@ app.get('/api/events', async (req, res) => {
   const url = `https://www.googleapis.com/calendar/v3/calendars/${CALENDAR_ID}/events?key=${API_KEY}`;
 
   try {
-    // Precisamos instalar o node-fetch para usar fetch no backend
-    // No terminal: npm install node-fetch
     const fetch = (await import('node-fetch')).default;
     const response = await fetch(url);
     const data = await response.json();
@@ -122,8 +134,6 @@ app.get('/api/events', async (req, res) => {
   }
 });
 
-
-// Inicia o servidor para ele ficar "ouvindo" as requisições
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });

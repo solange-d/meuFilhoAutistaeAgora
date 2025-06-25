@@ -1,3 +1,4 @@
+import * as SecureStore from 'expo-secure-store';
 import React, { useEffect, useState } from 'react';
 import {
   Image,
@@ -10,17 +11,38 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import imgPrincipal from '../../assets/image/img-principal.png';
 import imgUsuario from '../../assets/image/img-usuario.png';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
 
 const HomeView = ({ navigation }: any) => {
   const [greeting, setGreeting] = useState('');
-  const userName = 'Fulano'; // Substituir pelo nome do usuário obtido do perfil
+  const [userName, setUserName] = useState('Visitante');
 
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour < 12) setGreeting(' Bom dia');
     else if (hour < 18) setGreeting(' Boa tarde');
     else setGreeting(' Boa noite');
+
+    const fetchUserProfile = async () => {
+      const token = await SecureStore.getItemAsync('userToken');
+      if (token) {
+        try {
+          const response = await fetch('http://localhost:3000/api/profile', {
+            headers: {
+              'x-auth-token': token, // Envia o token no cabeçalho
+            },
+          });
+          const data = await response.json();
+          if (response.ok) {
+            setUserName(data.fullName);
+          }
+        } catch (error) {
+          console.error("Erro ao buscar perfil:", error);
+        }
+      }
+    };
+
+    fetchUserProfile();
   }, []);
 
   // Data de vencimento do documento
@@ -72,6 +94,7 @@ const HomeView = ({ navigation }: any) => {
           <Text style={styles.greeting}>
             Olá, {greeting}
             {'\n'}
+            {/* AQUI USAMOS O NOME REAL */}
             <Text style={styles.userName}>{userName}</Text>
           </Text>
         </View>

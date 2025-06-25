@@ -1,13 +1,13 @@
 import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
   Linking,
   ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { Colors } from '../../constants/colors';
+import { Colors } from '../../constants/Colors';
 import { rightsLinks } from '../../constants/rightsLinks';
 
 const RightsBenefitsView = () => {

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Colors } from '../../constants/colors';
 import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList, Topic } from '../interface/topic';
+import React, { useState } from 'react';
+import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Colors } from '../../constants/Colors';
+import { RootStackParamList } from '../interface/topic';
 
 type TopicDetailProps = {
   route: RouteProp<RootStackParamList, 'TopicDetail'>;
