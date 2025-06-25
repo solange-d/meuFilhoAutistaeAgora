@@ -1,4 +1,4 @@
-import imgPrincipal from '../assets/image/img-principal.png';
+import imgPrincipal from '../assets/images/img-principal.png';
 import { OnboardingItem } from '../models/onboardingItem';
 
 export const onboardingData: OnboardingItem[] = [
