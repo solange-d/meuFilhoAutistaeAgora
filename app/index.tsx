@@ -1,6 +1,8 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { RootStackParamList } from '../interfaces/topic';
+import { initDB } from '../service/databaseService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import BottomTabs from './navigation/bottomTabs';
 import ChangePassword from './views/changePasswordView';
@@ -21,6 +23,19 @@ import TopicDetail from './views/topicDetailView';
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
+  const [initialRoute, setInitialRoute] = useState<'Onboarding' | 'BottomTabs'>('Onboarding');
+
+  useEffect(() => {
+    const checkLogin = async () => {
+      initDB();
+      const user = await AsyncStorage.getItem('user');
+      if (user) {
+        setInitialRoute('BottomTabs');
+      }
+    };
+    checkLogin();
+  }, []);
+
   return (
     <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Onboarding" component={OnboardingView} />

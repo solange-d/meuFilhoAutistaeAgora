@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Image,
   ScrollView,
@@ -11,57 +12,67 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import imgPrincipal from '../../assets/images/img-principal.png';
 import imgUsuario from '../../assets/images/img-usuario.png';
 import { Colors } from '../../constants/Colors';
+import { UserModel } from '../../models/userModel';
 
 const HomeView = ({ navigation }: any) => {
+  const [user, setUser] = useState<UserModel | null>(null);
   const [greeting, setGreeting] = useState('');
-  const userName = 'Fulano'; // Substituir pelo nome do usuário obtido do perfil
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const storedUser = await AsyncStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    };
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const hour = new Date().getHours();
-    if (hour < 12) setGreeting(' Bom dia');
-    else if (hour < 18) setGreeting(' Boa tarde');
-    else setGreeting(' Boa noite');
+    if (hour < 12) setGreeting('Bom dia');
+    else if (hour < 18) setGreeting('Boa tarde');
+    else setGreeting('Boa noite');
   }, []);
 
-  // Data de vencimento do documento
   const dueDate = new Date('2025-03-09T00:00:00');
   const currentDate = new Date();
   const timeDiff = dueDate.getTime() - currentDate.getTime();
   const daysUntilDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
- const renderDocumentStatus = () => {
-  const absoluteDays = Math.abs(daysUntilDue);
-  
-  return (
-    <>
-      <View style={styles.daysContainer}>
-        <Text style={styles.daysNumber}>{absoluteDays}</Text>
-        <Text style={styles.daysLabel}>
-          {absoluteDays === 1 ? 'dia' : 'dias'}
-        </Text>
-      </View>
+  const renderDocumentStatus = () => {
+    const absoluteDays = Math.abs(daysUntilDue);
 
-      {daysUntilDue > 0 && (
-        <Text style={styles.cardDescription}>
-          Faltantes para o vencimento da carteirinha de identificação.
-        </Text>
-      )}
+    return (
+      <>
+        <View style={styles.daysContainer}>
+          <Text style={styles.daysNumber}>{absoluteDays}</Text>
+          <Text style={styles.daysLabel}>
+            {absoluteDays === 1 ? 'dia' : 'dias'}
+          </Text>
+        </View>
 
-      {daysUntilDue === 0 && (
-        <Text style={styles.cardDescription}>
-          Seu documento <Text style={{ fontWeight: 'bold' }}>vence hoje</Text>!
-        </Text>
-      )}
+        {daysUntilDue > 0 && (
+          <Text style={styles.cardDescription}>
+            Faltantes para o vencimento da carteirinha de identificação.
+          </Text>
+        )}
 
-      {daysUntilDue < 0 && (
-        <Text style={styles.cardDescription}>
-          Sua carteirinha de identificação{' '}
-          <Text style={{ fontWeight: 'bold' }}>venceu</Text>.
-        </Text>
-      )}
-    </>
-  );
-};
+        {daysUntilDue === 0 && (
+          <Text style={styles.cardDescription}>
+            Seu documento <Text style={{ fontWeight: 'bold' }}>vence hoje</Text>!
+          </Text>
+        )}
+
+        {daysUntilDue < 0 && (
+          <Text style={styles.cardDescription}>
+            Sua carteirinha de identificação{' '}
+            <Text style={{ fontWeight: 'bold' }}>venceu</Text>.
+          </Text>
+        )}
+      </>
+    );
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -72,7 +83,7 @@ const HomeView = ({ navigation }: any) => {
           <Text style={styles.greeting}>
             Olá, {greeting}
             {'\n'}
-            <Text style={styles.userName}>{userName}</Text>
+            <Text style={styles.userName}>{user?.fullName || ''}</Text>
           </Text>
         </View>
         <View style={styles.icons}>

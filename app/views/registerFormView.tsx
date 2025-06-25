@@ -1,8 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Alert,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/Colors';
 import imgPrincipal from '../../assets/images/img-principal.png';
+
+import { registerUser } from '../../viewmodels/authViewModel';
+import { UserModel } from '../../models/userModel';
 
 const RegisterForm = ({ navigation }: any) => {
   const [fullName, setFullName] = useState('');
@@ -11,9 +22,40 @@ const RegisterForm = ({ navigation }: any) => {
   const [password, setPassword] = useState('');
   const [birthDate, setBirthDate] = useState('');
 
-  const handleRegister = () => {
-    // Lógica de cadastro aqui
+  const handleRegister = async () => {
+    const newUser: UserModel = {
+      fullName,
+      email,
+      phone,
+      password,
+      birthDate,
+    };
+
+    try {
+      await registerUser(newUser);
+      Alert.alert('Sucesso', 'Cadastro realizado com sucesso!');
+      navigation.navigate('LoginForm');
+    } catch (error: any) {
+      Alert.alert('Erro', error.message || 'Erro ao cadastrar');
+    }
   };
+
+  const formatDate = (text: string) => {
+  // Remove tudo que não é número
+  const cleaned = text.replace(/\D/g, '');
+  let formatted = '';
+
+  if (cleaned.length <= 2) {
+    formatted = cleaned;
+  } else if (cleaned.length <= 4) {
+    formatted = `${cleaned.slice(0, 2)}/${cleaned.slice(2)}`;
+  } else {
+    formatted = `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}/${cleaned.slice(4, 8)}`;
+  }
+
+  setBirthDate(formatted);
+};
+
 
   return (
     <View style={styles.container}>
@@ -64,7 +106,8 @@ const RegisterForm = ({ navigation }: any) => {
         placeholder="Data de nascimento (DD/MM/AAAA)"
         placeholderTextColor={Colors.textSecondary}
         value={birthDate}
-        onChangeText={setBirthDate}
+        onChangeText={formatDate}
+        keyboardType="numeric"
       />
 
       {/* Botão de Cadastrar */}
@@ -115,7 +158,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 16,
     marginBottom: 16,
-    color: Colors.textPrimary,
   },
   registerButton: {
     backgroundColor: Colors.primary,

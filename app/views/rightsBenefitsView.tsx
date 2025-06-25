@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.textPrimary,
     marginBottom: 20,
+    textAlign: 'center',
   },
   card: {
     backgroundColor: Colors.backgroundSecondary,

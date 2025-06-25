@@ -1,100 +1,95 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
-import * as Location from 'expo-location';
-import { getDistance } from 'geolib';
-import { fetchGoogleCalendarEvents } from '../../Service/googleCalendarService';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/Colors';
-import { CalendarEvent } from '@/types/types';
-import DistanceSlider from '../components/DistanceSlider';
-
-export default function CalendarView() {
-  const [events, setEvents] = useState<(CalendarEvent & { distance: string })[]>([]);
-  const [location, setLocation] = useState<any>(null);
-  const [radius, setRadius] = useState(50);
-
-  useEffect(() => {
-  (async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') return;
-
-    const loc = await Location.getCurrentPositionAsync({});
-    setLocation(loc.coords);
-
-    const allEvents = await fetchGoogleCalendarEvents();
-    const now = new Date();
-
-    const filteredEvents = await Promise.all(
-      allEvents.map(async (event: CalendarEvent) => {
-        if (!event.location) return null;
-
-        const eventDate = event.start?.dateTime
-          ? new Date(event.start.dateTime)
-          : new Date(`${event.start.date}T23:59:59`);
-
-        if (eventDate.getTime() < now.getTime()) return null;
-
-        try {
-          const geo = await Location.geocodeAsync(event.location);
-          if (!geo.length) return null;
-
-          const dist = getDistance(
-            { latitude: loc.coords.latitude, longitude: loc.coords.longitude },
-            { latitude: geo[0].latitude, longitude: geo[0].longitude }
-          );
-
-          if (radius === 0 || dist <= radius * 1000) {
-            return {
-              ...event,
-              distance: (dist / 1000).toFixed(1) + ' km',
-            };
-          }
-        } catch (e) {
-          return null;
-        }
-        return null;
-      })
-    );
-
-    setEvents(filteredEvents.filter(Boolean));
-  })();
-}, [radius]);
-
-
-  const renderItem = ({ item }: any) => (
-    <View style={styles.card}>
-      <Text style={styles.title}>{item.summary}</Text>
-      <Text>{item.start?.dateTime?.replace('T', ' ').substring(0, 16) || item.start?.date}</Text>
-      <Text>{item.location}</Text>
-      <Text>Distância: {item.distance}</Text>
-    </View>
-  );
-
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList, Topic } from '../../interfaces/topic';
+import uuid from 'react-native-uuid';
+type NewTopicProps = {
+  navigation: NativeStackNavigationProp<RootStackParamList, 'NewTopic'>;
+  route: { params: { setTopics: React.Dispatch<React.SetStateAction<Topic[]>> } };
+};
+const NewTopicView: React.FC<NewTopicProps> = ({ navigation, route }) => {
+  const { setTopics } = route.params;
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const handleSubmit = () => {
+    if (title.trim() === '' || description.trim() === '') {
+      Alert.alert('Erro', 'Preencha todos os campos');
+      return;
+    }
+    const newTopic: Topic = {
+      id: uuid.v4().toString(),
+      title: title.trim(),
+      description: description.trim(),
+      likes: 0,
+      comments: [],
+    };
+    setTopics(prevTopics => [...prevTopics, newTopic]);
+    navigation.goBack();
+  };
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Eventos próximos</Text>
-      <Text style={styles.filter}>Defina o raio de distância dos eventos de interesse:</Text>
-
-      <DistanceSlider value={radius} onValueChange={setRadius} />
-
-      <FlatList
-        data={events}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={{ padding: 16 }}
+      <Text style={styles.title}>Novo Tópico</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Título do tópico"
+        value={title}
+        onChangeText={setTitle}
       />
+      <TextInput
+        style={[styles.input, styles.textArea]}
+        placeholder="Descrição do tópico"
+        value={description}
+        onChangeText={setDescription}
+        multiline
+        numberOfLines={4}
+      />
+      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+        <Icon name="send" size={20} color="#fff" />
+        <Text style={styles.buttonText}>Publicar</Text>
+      </TouchableOpacity>
     </View>
   );
-}
-
+};
+export default NewTopicView;
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 60, backgroundColor: Colors.background },
-  header: { fontSize: 22, fontWeight: 'bold', textAlign: 'center', marginBottom: 12, color: Colors.textPrimary },
-  filter: { fontSize: 16, textAlign: 'left', padding: 16, color: Colors.textPrimary },
-  card: {
-    backgroundColor: Colors.backgroundSecondary,
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 12,
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background,
+    padding: 20,
   },
-  title: { fontSize: 18, fontWeight: 'bold' },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: Colors.textPrimary,
+    marginBottom: 20,
+  },
+  input: {
+    backgroundColor: Colors.backgroundSecondary,
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 16,
+    color: '#000',
+  },
+  textArea: {
+    height: 120,
+    textAlignVertical: 'top',
+  },
+  button: {
+    backgroundColor: Colors.primary,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 14,
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginLeft: 8,
+  },
 });

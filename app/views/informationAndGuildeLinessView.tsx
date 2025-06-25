@@ -1,55 +1,38 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Linking,
+} from 'react-native';
 import { Colors } from '../../constants/Colors';
+import { guidelinesLinks } from '../../constants/guidelinesLinks';
 
-const InformationAndGuidelinesView = ({ navigation }: any) => {
-  // Exemplo de tópicos e orientações
-  const guidelines = [
-    {
-      id: 1,
-      title: 'O que é Autismo?',
-      description: 'Aprenda sobre o espectro autista, suas características e como ele afeta a vida cotidiana.',
-    },
-    {
-      id: 2,
-      title: 'Diagnóstico do Autismo',
-      description: 'Entenda como o diagnóstico de autismo é feito e a importância de um diagnóstico precoce.',
-    },
-    {
-      id: 3,
-      title: 'Tratamento e Terapias',
-      description: 'Descubra as opções de tratamento e terapias que podem ajudar no desenvolvimento de crianças com autismo.',
-    },
-    {
-      id: 4,
-      title: 'Direitos e Benefícios',
-      description: 'Informações sobre os direitos e benefícios legais disponíveis para pessoas com autismo e suas famílias.',
-    },
-  ];
+const InformationAndGuidelinesView = () => {
+  const openLink = (url: string) => {
+    Linking.openURL(url);
+  };
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Informações e Orientações</Text>
-      </View>
+      <Text style={styles.title}>Informações e Orientações</Text>
 
-      <View style={styles.guidelinesContainer}>
-        {guidelines.map((guideline) => (
-          <View key={guideline.id} style={styles.guidelineCard}>
-            <Text style={styles.guidelineTitle}>{guideline.title}</Text>
-            <Text style={styles.guidelineDescription}>{guideline.description}</Text>
-            <TouchableOpacity
-              style={styles.viewButton}
-              onPress={() => navigation.navigate('GuidelineDetail', { guidelineId: guideline.id })}
-            >
-              <Text style={styles.viewButtonText}>Ver Detalhes</Text>
-            </TouchableOpacity>
-          </View>
-        ))}
-      </View>
+      {guidelinesLinks.map((item) => (
+        <View key={item.id} style={styles.card}>
+          <Text style={styles.cardTitle}>{item.title}</Text>
+          <Text style={styles.cardSummary}>{item.summary}</Text>
+          <TouchableOpacity style={styles.button} onPress={() => openLink(item.url)}>
+            <Text style={styles.buttonText}>Saiba mais</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
     </ScrollView>
   );
 };
+
+export default InformationAndGuidelinesView;
 
 const styles = StyleSheet.create({
   container: {
@@ -57,47 +40,40 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     padding: 16,
   },
-  header: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  headerText: {
+  title: {
     fontSize: 24,
     fontWeight: 'bold',
     color: Colors.textPrimary,
+    marginBottom: 20,
+    textAlign: 'center',
   },
-  guidelinesContainer: {
-    marginTop: 20,
-  },
-  guidelineCard: {
+  card: {
     backgroundColor: Colors.backgroundSecondary,
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 15,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
     elevation: 3,
   },
-  guidelineTitle: {
+  cardTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: Colors.primary,
+    marginBottom: 8,
   },
-  guidelineDescription: {
-    fontSize: 14,
+  cardSummary: {
+    fontSize: 15,
     color: Colors.textSecondary,
-    marginTop: 5,
-    marginBottom: 10,
+    marginBottom: 12,
   },
-  viewButton: {
+  button: {
     backgroundColor: Colors.primary,
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    alignSelf: 'flex-start',
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
   },
-  viewButtonText: {
+  buttonText: {
     color: Colors.textPrimary,
     fontWeight: 'bold',
+    fontSize: 15,
   },
 });
-
-export default InformationAndGuidelinesView;
