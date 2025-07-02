@@ -1,9 +1,13 @@
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { Alert } from 'react-native';
+import { RootStackParamList } from '../interfaces/topic';
 import { UserModel } from '../models/userModel';
 import { registerUser } from '../repository/UserRepository';
 
-export const useRegisterViewModel = (navigation: any) => {
+export const useRegisterViewModel = (
+  navigation: NativeStackNavigationProp<RootStackParamList>
+) => {
   const [user, setUser] = useState<UserModel>({
     fullName: '',
     email: '',
@@ -11,12 +15,12 @@ export const useRegisterViewModel = (navigation: any) => {
     password: '',
     birthDate: '',
   });
-
+  
   const handleChange = (key: keyof UserModel, value: string) => {
     if (key === 'birthDate') {
       value = formatDate(value);
     }
-    setUser(prev => ({ ...prev, [key]: value }));
+    setUser((prev) => ({ ...prev, [key]: value }));
   };
 
   const formatDate = (text: string) => {

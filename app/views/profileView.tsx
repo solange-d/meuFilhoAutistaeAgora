@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, Modal } from 'react-native';
+import { Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import imgUsuario from '../../assets/images/img-usuario.png';
 import { Colors } from '../../constants/Colors';
 
 const ProfileView = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const userName = 'Fulano'; // Substitua por nome real do usuário
+  const userName = 'Fulano'; 
 
   const handleLogout = () => {
     setModalVisible(false);
-    navigation.replace('Login'); // Redireciona para tela de login
+    navigation.replace('Login'); 
   };
 
   const menuItems = [

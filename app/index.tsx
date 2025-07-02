@@ -1,9 +1,10 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createStackNavigator } from '@react-navigation/stack';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { RootStackParamList } from '../interfaces/topic';
 import { initDB } from '../service/databaseService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import DocumentDetailView from '../app/views/documentDetailView';
 import BottomTabs from './navigation/bottomTabs';
 import ChangePassword from './views/changePasswordView';
 import Documents from './views/documentsView';
@@ -53,6 +54,7 @@ export default function App() {
       <Stack.Screen name="informationAndGuildeLiness" component={informationAndGuildeLiness} />
       <Stack.Screen name="NewTopic" component={NewTopic} />
       <Stack.Screen name="TopicDetail" component={TopicDetail} />
+      <Stack.Screen name="DocumentDetail" component={DocumentDetailView} />
     </Stack.Navigator>
   );
 }

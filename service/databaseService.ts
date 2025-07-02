@@ -21,10 +21,17 @@ export const initDB = async () => {
 
 export const insertUser = async (user: UserModel) => {
   const db = await getDbConnection();
-  await db.runAsync(
-    `INSERT INTO users (fullName, email, phone, password, birthDate) VALUES (?, ?, ?, ?, ?)`,
-    [user.fullName, user.email, user.phone, user.password, user.birthDate]
-  );
+  try {
+    await db.runAsync(
+      `INSERT INTO users (fullName, email, phone, password, birthDate) VALUES (?, ?, ?, ?, ?)`,
+      [user.fullName, user.email, user.phone, user.password, user.birthDate]
+    );
+  } catch (error: any) {
+    if (error.message.includes('UNIQUE constraint failed')) {
+      throw new Error('Este e-mail ou telefone já está em uso.');
+    }
+    throw error;
+  }
 };
 
 export const getUserByEmailOrPhoneAndPassword = async (
@@ -37,4 +44,23 @@ export const getUserByEmailOrPhoneAndPassword = async (
     [emailOrPhone, emailOrPhone, password]
   );
   return result ? (result as UserModel) : null;
+};
+
+export const getUserById = async (id: number): Promise<UserModel | null> => {
+  const db = await getDbConnection();
+  const result = await db.getFirstAsync('SELECT * FROM users WHERE id = ?', [id]);
+  return result ? (result as UserModel) : null;
+};
+
+export const updateUser = async (user: UserModel) => {
+  const db = await getDbConnection();
+  await db.runAsync(
+    'UPDATE users SET fullName = ?, email = ?, phone = ?, birthDate = ? WHERE id = ?',
+    [user.fullName, user.email, user.phone, user.birthDate, user.id]
+  );
+};
+
+export const deleteUser = async (id: number) => {
+  const db = await getDbConnection();
+  await db.runAsync('DELETE FROM users WHERE id = ?', [id]);
 };

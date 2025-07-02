@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
 import {
-  View,
+  ActivityIndicator,
+  Image,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Image,
-  Platform,
+  View
 } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { launchImageLibrary, ImagePickerResponse } from 'react-native-image-picker';
-import { Colors } from '../../constants/Colors';
 import imgUsuario from '../../assets/images/img-usuario.png';
+import { Colors } from '../../constants/Colors';
+import { useProfileViewModel } from '../../viewmodels/ProfileViewModel';
+
 
 const EditProfile = () => {
+  const { user, isLoading, handleChange, handleUpdate } = useProfileViewModel();
   const [avatar, setAvatar] = useState<{ uri: string } | null>(null);
-  const [fullName, setFullName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [birthDate, setBirthDate] = useState('');
 
   const handleSelectImage = () => {
   launchImageLibrary(
@@ -41,22 +40,21 @@ const EditProfile = () => {
   );
 };
 
-
-  const handleUpdateProfile = () => {
-    // Lógica para atualizar o perfil
-    console.log('Perfil atualizado');
-  };
-
-  // Função para extrair o primeiro nome
   const getFirstName = () => {
-    return fullName.trim().split(' ')[0] || '';
+    return user?.fullName?.trim().split(' ')[0] || '';
   };
+
+  if (isLoading) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      {/* Título da tela */}
       <Text style={styles.title}>Editar Perfil</Text>
-
       <View style={styles.avatarContainer}>
         <Image
           source={avatar ? avatar : imgUsuario}
@@ -67,44 +65,36 @@ const EditProfile = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Exibição do primeiro nome */}
-      {fullName.trim() !== '' && (
-        <Text style={styles.firstName}>{getFirstName()}</Text>
-      )}
+      <Text style={styles.firstName}>{getFirstName()}</Text>
 
       <TextInput
         style={styles.input}
         placeholder="Nome completo"
-        placeholderTextColor={Colors.textSecondary}
-        value={fullName}
-        onChangeText={setFullName}
+        value={user?.fullName || ''}
+        onChangeText={(text) => handleChange('fullName', text)}
       />
       <TextInput
         style={styles.input}
         placeholder="Número de telefone"
-        placeholderTextColor={Colors.textSecondary}
-        value={phoneNumber}
-        onChangeText={setPhoneNumber}
+        value={user?.phone || ''}
+        onChangeText={(text) => handleChange('phone', text)}
         keyboardType="phone-pad"
       />
       <TextInput
         style={styles.input}
         placeholder="E-mail"
-        placeholderTextColor={Colors.textSecondary}
-        value={email}
-        onChangeText={setEmail}
+        value={user?.email || ''}
+        onChangeText={(text) => handleChange('email', text)}
         keyboardType="email-address"
-        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
         placeholder="Data de nascimento (DD/MM/AAAA)"
-        placeholderTextColor={Colors.textSecondary}
-        value={birthDate}
-        onChangeText={setBirthDate}
+        value={user?.birthDate || ''}
+        onChangeText={(text) => handleChange('birthDate', text)}
       />
 
-      <TouchableOpacity style={styles.updateButton} onPress={handleUpdateProfile}>
+      <TouchableOpacity style={styles.updateButton} onPress={handleUpdate}>
         <Text style={styles.updateButtonText}>Atualizar Perfil</Text>
       </TouchableOpacity>
     </View>
@@ -112,6 +102,10 @@ const EditProfile = () => {
 };
 
 const styles = StyleSheet.create({
+  loadingContainer: { 
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.background,

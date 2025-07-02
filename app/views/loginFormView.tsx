@@ -1,27 +1,30 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState } from 'react';
 import {
+  Alert,
   Image,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { loginUser } from '../../viewmodels/authViewModel';
 import imgPrincipal from '../../assets/images/img-principal.png';
 import { Colors } from '../../constants/Colors';
-import { UserModel } from '../../models/userModel';
+import { loginUser } from '../../viewmodels/authViewModel';
 
 const LoginForm = ({ navigation }: any) => {
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
+    if (!emailOrPhone || !password) {
+      Alert.alert('Atenção', 'Por favor, preencha todos os campos.');
+      return;
+    }
     try {
-      const user: UserModel | null = await loginUser(emailOrPhone, password);
+      const user = await loginUser(emailOrPhone, password);
       if (user) {
         await AsyncStorage.setItem('user', JSON.stringify(user));
         navigation.replace('BottomTabs');
@@ -29,7 +32,8 @@ const LoginForm = ({ navigation }: any) => {
         Alert.alert('Erro', 'Credenciais inválidas!');
       }
     } catch (error) {
-      Alert.alert('Erro', 'Erro ao realizar login.');
+      console.error('Erro inesperado no login:', error);
+      Alert.alert('Erro', 'Ocorreu um problema ao tentar fazer o login.');
     }
   };
 
