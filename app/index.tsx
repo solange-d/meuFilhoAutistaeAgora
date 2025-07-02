@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { Colors } from '../constants/Colors';
 import { RootStackParamList } from '../interfaces/topic';
-
 import BottomTabs from './navigation/bottomTabs';
 import AddDocumentView from './views/addDocumentView';
 import ChangePassword from './views/changePasswordView';
@@ -30,7 +29,7 @@ export default function App() {
   const [initialRoute, setInitialRoute] = useState<'Onboarding' | 'BottomTabs' | null>(null);
 
   useEffect(() => {
-    const checkLoginStatus = async () => {
+const checkLoginStatus = async () => {
       try {
         const user = await AsyncStorage.getItem('user');
         setInitialRoute(user ? 'BottomTabs' : 'Onboarding');
@@ -38,16 +37,20 @@ export default function App() {
         setInitialRoute('Onboarding'); 
       }
     };
-    checkLoginStatus();
+
+checkLoginStatus();
   }, []);
 
+
   if (!initialRoute) {
+
     return (
       <View style={{ flex: 1, justifyContent: 'center', backgroundColor: Colors.background }}>
         <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
+
 
   return (
     <Stack.Navigator

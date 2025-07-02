@@ -1,3 +1,4 @@
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import {
@@ -8,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 import imgUsuario from '../../assets/images/img-usuario.png';
 import { Colors } from '../../constants/Colors';
@@ -15,7 +17,9 @@ import { UserModel } from '../../models/userModel';
 
 const ProfileView = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(false);
+
   const [user, setUser] = useState<UserModel | null>(null);
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -29,11 +33,13 @@ const ProfileView = ({ navigation }: any) => {
 
   const handleLogout = async () => {
     setModalVisible(false);
+
     await AsyncStorage.removeItem('user');
     navigation.reset({
       index: 0,
       routes: [{ name: 'Login' }],
     });
+
   };
 
   const menuItems = [

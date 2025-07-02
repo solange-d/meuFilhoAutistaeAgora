@@ -15,12 +15,12 @@ export const useRegisterViewModel = (
     password: '',
     birthDate: '',
   });
-
+  
   const handleChange = (key: keyof UserModel, value: string) => {
     if (key === 'birthDate') {
       value = formatDate(value);
     }
-    setUser(prev => ({ ...prev, [key]: value }));
+    setUser((prev) => ({ ...prev, [key]: value }));
   };
 
   const formatDate = (text: string) => {

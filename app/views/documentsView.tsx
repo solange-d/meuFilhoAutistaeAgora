@@ -1,3 +1,4 @@
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
@@ -9,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/Colors';
 import { fetchDocumentsForUser } from '../../repository/DocumentRepository';
@@ -49,21 +51,25 @@ const DocumentsView = ({ navigation }: any) => {
       
       await exportDocumentsAsCSV(user.id);
 
+
     } catch (error: any) {
       Alert.alert('Exportar Documentos', error.message);
     }
   };
   
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Meus Documentos</Text>
       </View>
 
+
       <View style={styles.actionButtonsContainer}>
         <TouchableOpacity
           style={styles.actionButton}
           onPress={() => navigation.navigate('AddDocument')} 
+
         >
           <Icon name="add-circle-outline" size={20} color={Colors.primary} />
           <Text style={styles.actionButtonText}>Adicionar</Text>
@@ -78,6 +84,7 @@ const DocumentsView = ({ navigation }: any) => {
         </TouchableOpacity>
       </View>
 
+
       <FlatList
         data={documents}
         keyExtractor={(item) => item.id.toString()}
@@ -89,6 +96,7 @@ const DocumentsView = ({ navigation }: any) => {
             <Text style={styles.documentTitle}>{item.name}</Text>
             {item.dueDate && <Text style={styles.documentDescription}>Vencimento: {item.dueDate}</Text>}
             {item.notes && <Text style={styles.documentDescription}>Obs: {item.notes}</Text>}
+
             <TouchableOpacity
               style={styles.viewButton}
               onPress={() =>

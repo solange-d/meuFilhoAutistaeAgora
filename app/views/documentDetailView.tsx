@@ -1,3 +1,4 @@
+
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
@@ -23,12 +24,14 @@ interface DocumentDetails {
   notes: string;
 }
 
+
 type DocumentDetailScreenRouteProp = RouteProp<
   RootStackParamList,
   'DocumentDetail'
 >;
 
 const DocumentDetailView = () => {
+
   const route = useRoute<DocumentDetailScreenRouteProp>();
   const navigation = useNavigation(); 
   const { documentId } = route.params;
