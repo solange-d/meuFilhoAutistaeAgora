@@ -58,6 +58,7 @@ export const getUserByEmailOrPhoneAndPassword = async (
     `SELECT * FROM users WHERE (email = ? OR phone = ?) AND password = ?`,
     [emailOrPhone, emailOrPhone, password]
   );
+
   return result ?? null;
 };
 
@@ -92,4 +93,5 @@ export const updateDocument = async (doc: { id: number; name: string; dueDate: s
 export const deleteDocument = async (id: number) => {
   const db = await getDbConnection();
   await db.runAsync(`DELETE FROM documents WHERE id = ?`, [id]);
+
 };

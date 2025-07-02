@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { Colors } from '../constants/Colors';
 import { RootStackParamList } from '../interfaces/topic';
-
 import BottomTabs from './navigation/bottomTabs';
 import AddDocumentView from './views/addDocumentView';
 import ChangePassword from './views/changePasswordView';
@@ -59,7 +58,7 @@ export default function App() {
   const [authState, setAuthState] = useState<'loading' | 'signedIn' | 'signedOut'>('loading');
 
   useEffect(() => {
-    const checkLoginStatus = async () => {
+const checkLoginStatus = async () => {
       try {
         const user = await AsyncStorage.getItem('user');
         setAuthState(user ? 'signedIn' : 'signedOut');
@@ -67,10 +66,11 @@ export default function App() {
         setAuthState('signedOut'); 
       }
     };
-    checkLoginStatus();
+
+checkLoginStatus();
   }, []);
 
-  if (authState === 'loading') {
+if (authState === 'loading') {
     return (
       <View style={{ flex: 1, justifyContent: 'center', backgroundColor: Colors.background }}>
         <ActivityIndicator size="large" color={Colors.primary} />
