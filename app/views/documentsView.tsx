@@ -1,52 +1,93 @@
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback, useState } from 'react';
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/Colors';
+import { fetchDocumentsForUser } from '../../repository/DocumentRepository';
+
+interface Document {
+  id: number;
+  name: string;
+  dueDate: string;
+  notes: string;
+}
 
 const DocumentsView = ({ navigation }: any) => {
-  const documents = [
-    {
-      id: 1,
-      title: 'Carteirinha de Identificação',
-      description: 'Documento oficial que deve ser renovado anualmente.',
-    },
-    {
-      id: 2,
-      title: 'Certificado de Vacinação',
-      description: 'Certificado com as vacinas tomadas até o momento.',
-    },
-    {
-      id: 3,
-      title: 'Documento de Identidade',
-      description: 'RG ou CPF, utilizado para identificação pessoal.',
-    },
-    {
-      id: 4,
-      title: 'Comprovante de Endereço',
-      description: 'Comprovante de residência recente.',
-    },
-  ];
+  const [documents, setDocuments] = useState<Document[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const loadDocuments = async () => {
+        const userString = await AsyncStorage.getItem('user');
+        if (userString) {
+          const user = JSON.parse(userString);
+          const userDocuments = await fetchDocumentsForUser(user.id);
+          setDocuments(userDocuments as Document[]);
+        }
+      };
+      loadDocuments();
+    }, [])
+  );
+
+  const handleExportDocuments = () => {
+    Alert.alert('Funcionalidade Futura', 'A funcionalidade para exportar documentos será implementada aqui.');
+  };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Meus Documentos</Text>
       </View>
 
-      <View style={styles.documentsContainer}>
-        {documents.map((doc) => (
-          <View key={doc.id} style={styles.documentCard}>
-            <Text style={styles.documentTitle}>{doc.title}</Text>
-            <Text style={styles.documentDescription}>{doc.description}</Text>
+      <View style={styles.actionButtonsContainer}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={() => navigation.navigate('AddDocument')} 
+        >
+          <Icon name="add-circle-outline" size={20} color={Colors.primary} />
+          <Text style={styles.actionButtonText}>Adicionar</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={handleExportDocuments}
+        >
+          <Icon name="share-outline" size={20} color={Colors.primary} />
+          <Text style={styles.actionButtonText}>Exportar</Text>
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={documents}
+        keyExtractor={(item) => item.id.toString()}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>Nenhum documento cadastrado.</Text>
+        }
+        renderItem={({ item }) => (
+          <View style={styles.documentCard}>
+            <Text style={styles.documentTitle}>{item.name}</Text>
+            {item.dueDate && <Text style={styles.documentDescription}>Vencimento: {item.dueDate}</Text>}
+            {item.notes && <Text style={styles.documentDescription}>Obs: {item.notes}</Text>}
             <TouchableOpacity
               style={styles.viewButton}
-              onPress={() => navigation.navigate('DocumentDetail', { documentId: doc.id })}
+              onPress={() =>
+                navigation.navigate('DocumentDetail', { documentId: item.id })
+              }
             >
               <Text style={styles.viewButtonText}>Ver Detalhes</Text>
             </TouchableOpacity>
           </View>
-        ))}
-      </View>
-    </ScrollView>
+        )}
+      />
+    </View>
   );
 };
 
@@ -55,6 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     padding: 16,
+    paddingTop: 60,
   },
   header: {
     alignItems: 'center',
@@ -65,8 +107,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.textPrimary,
   },
+  actionButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
+  },
+  actionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.backgroundSecondary,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    elevation: 2,
+  },
+  actionButtonText: {
+    color: Colors.primary,
+    fontWeight: 'bold',
+    marginLeft: 8,
+    fontSize: 16,
+  },
   documentsContainer: {
-    marginTop: 20,
+    marginTop: 10,
   },
   documentCard: {
     backgroundColor: Colors.backgroundSecondary,
@@ -96,6 +158,12 @@ const styles = StyleSheet.create({
   viewButtonText: {
     color: Colors.textPrimary,
     fontWeight: 'bold',
+  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 50,
+    fontSize: 16,
+    color: Colors.textSecondary,
   },
 });
 

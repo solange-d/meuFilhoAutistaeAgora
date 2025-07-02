@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Image,
   StyleSheet,
@@ -6,32 +6,21 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { loginUser } from '../../viewmodels/authViewModel';
 import imgPrincipal from '../../assets/images/img-principal.png';
 import { Colors } from '../../constants/Colors';
-import { UserModel } from '../../models/userModel';
+import { useLoginViewModel } from '../../viewmodels/loginViewModel';
 
 const LoginForm = ({ navigation }: any) => {
-  const [emailOrPhone, setEmailOrPhone] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    emailOrPhone,
+    setEmailOrPhone,
+    password,
+    setPassword,
+    handleLogin,
+  } = useLoginViewModel(navigation);
 
-  const handleLogin = async () => {
-    try {
-      const user: UserModel | null = await loginUser(emailOrPhone, password);
-      if (user) {
-        await AsyncStorage.setItem('user', JSON.stringify(user));
-        navigation.replace('BottomTabs');
-      } else {
-        Alert.alert('Erro', 'Credenciais inválidas!');
-      }
-    } catch (error) {
-      Alert.alert('Erro', 'Erro ao realizar login.');
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -65,7 +54,7 @@ const LoginForm = ({ navigation }: any) => {
       />
 
       {/* Link de Esqueceu a Senha */}
-      <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+      <TouchableOpacity onPress={() => navigation.navigate('ChangePassword')}>
         <Text style={styles.forgotPasswordText}>Esqueceu a sua senha?</Text>
       </TouchableOpacity>
 
