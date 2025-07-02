@@ -1,9 +1,10 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Colors } from '../../constants/Colors';
 import imgPrincipal from '../../assets/images/img-principal.png';
+import { Colors } from '../../constants/Colors';
 
 const LoginView = ({ navigation }: any) => {
+
   return (
     <View style={styles.container}>
       <Image source={imgPrincipal} style={styles.image} resizeMode="contain" />
@@ -28,8 +29,6 @@ const LoginView = ({ navigation }: any) => {
     </View>
   );
 };
-
-export default LoginView;
 
 const styles = StyleSheet.create({
   container: {
@@ -80,3 +79,5 @@ const styles = StyleSheet.create({
     color: Colors.primary,
   },
 });
+
+export default LoginView;

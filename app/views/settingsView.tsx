@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import {
   Modal,
-  View,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
+  View
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/Colors';
+import { useProfileViewModel } from '../../viewmodels/ProfileViewModel';
 
 const SettingsView = ({ navigation }: any) => {
+  const { handleDelete } = useProfileViewModel();
   const [modalVisible, setModalVisible] = useState(false);
 
   const menuItems = [
@@ -28,10 +29,8 @@ const SettingsView = ({ navigation }: any) => {
   ];
 
   const handleDeleteAccount = () => {
-    // Lógica para deletar a conta
     setModalVisible(false);
-    Alert.alert('Conta deletada com sucesso!');
-    navigation.replace('Login'); // Redireciona para a tela de login
+    handleDelete(); 
   };
 
   return (
@@ -86,6 +85,7 @@ const SettingsView = ({ navigation }: any) => {
     </View>
   );
 };
+
 
 export default SettingsView;
 

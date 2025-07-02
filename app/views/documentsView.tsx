@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/Colors';
 
 const DocumentsView = ({ navigation }: any) => {
@@ -26,10 +27,37 @@ const DocumentsView = ({ navigation }: any) => {
     },
   ];
 
+  const handleAddDocument = () => {
+    Alert.alert('Funcionalidade Futura', 'A tela para adicionar um novo documento será implementada aqui.');
+  };
+
+  const handleExportDocuments = () => {
+    Alert.alert('Funcionalidade Futura', 'A funcionalidade para exportar documentos será implementada aqui.');
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Meus Documentos</Text>
+      </View>
+
+    
+      <View style={styles.actionButtonsContainer}>
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={handleAddDocument}
+        >
+          <Icon name="add-circle-outline" size={20} color={Colors.primary} />
+          <Text style={styles.actionButtonText}>Adicionar</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.actionButton}
+          onPress={handleExportDocuments}
+        >
+          <Icon name="share-outline" size={20} color={Colors.primary} />
+          <Text style={styles.actionButtonText}>Exportar</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.documentsContainer}>
@@ -64,6 +92,26 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: Colors.textPrimary,
+  },
+  actionButtonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
+  },
+  actionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.backgroundSecondary,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    elevation: 2,
+  },
+  actionButtonText: {
+    color: Colors.primary,
+    fontWeight: 'bold',
+    marginLeft: 8,
+    fontSize: 16,
   },
   documentsContainer: {
     marginTop: 20,
