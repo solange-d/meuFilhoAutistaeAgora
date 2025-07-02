@@ -14,6 +14,8 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../../constants/Colors';
 import { fetchDocumentsForUser } from '../../repository/DocumentRepository';
+import { exportDocumentsAsCSV } from '../../service/exportService';
+
 
 interface Document {
   id: number;
@@ -39,17 +41,22 @@ const DocumentsView = ({ navigation }: any) => {
     }, [])
   );
 
-  const handleExportDocuments = () => {
-    Alert.alert('Funcionalidade Futura', 'A funcionalidade para exportar documentos será implementada aqui.');
-  };
+  const handleExportDocuments = async () => {
+    try {
+      const userString = await AsyncStorage.getItem('user');
+      if (!userString) {
+        throw new Error('Usuário não encontrado.');
+      }
+      const user = JSON.parse(userString);
+      
+      await exportDocumentsAsCSV(user.id);
 
-  const handleAddDocument = () => {
-    Alert.alert('Funcionalidade Futura', 'A tela para adicionar um novo documento será implementada aqui.');
-  };
 
-  const handleExportDocuments = () => {
-    Alert.alert('Funcionalidade Futura', 'A funcionalidade para exportar documentos será implementada aqui.');
+    } catch (error: any) {
+      Alert.alert('Exportar Documentos', error.message);
+    }
   };
+  
 
   return (
     <View style={styles.container}>

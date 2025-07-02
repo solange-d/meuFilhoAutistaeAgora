@@ -3501,6 +3501,11 @@ expo-router@~5.0.5:
     server-only "^0.0.1"
     shallowequal "^1.1.0"
 
+expo-sharing@~13.1.5:
+  version "13.1.5"
+  resolved "https://registry.npmjs.org/expo-sharing/-/expo-sharing-13.1.5.tgz"
+  integrity sha512-X/5sAEiWXL2kdoGE3NO5KmbfcmaCWuWVZXHu8OQef7Yig4ZgHFkGD11HKJ5KqDrDg+SRZe4ISd6MxE7vGUgm4w==
+
 expo-splash-screen@~0.30.8:
   version "0.30.8"
   resolved "https://registry.npmjs.org/expo-splash-screen/-/expo-splash-screen-0.30.8.tgz"
@@ -5052,6 +5057,7 @@ metro@^0.82.0, metro@0.82.2:
     expo-linking "~7.1.4"
     expo-location "~18.1.5"
     expo-router "~5.0.5"
+    expo-sharing "~13.1.5"
     expo-splash-screen "~0.30.8"
     expo-sqlite "~15.2.12"
     expo-status-bar "~2.2.3"
