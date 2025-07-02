@@ -1,5 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState } from 'react';
+
+import React from 'react';
+
 import {
   Alert,
   Image,
@@ -12,30 +13,20 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import imgPrincipal from '../../assets/images/img-principal.png';
 import { Colors } from '../../constants/Colors';
-import { loginUser } from '../../viewmodels/authViewModel';
+
+import { useLoginViewModel } from '../../viewmodels/loginViewModel';
+
 
 const LoginForm = ({ navigation }: any) => {
-  const [emailOrPhone, setEmailOrPhone] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    emailOrPhone,
+    setEmailOrPhone,
+    password,
+    setPassword,
+    handleLogin,
+  } = useLoginViewModel(navigation);
 
-  const handleLogin = async () => {
-    if (!emailOrPhone || !password) {
-      Alert.alert('Atenção', 'Por favor, preencha todos os campos.');
-      return;
-    }
-    try {
-      const user = await loginUser(emailOrPhone, password);
-      if (user) {
-        await AsyncStorage.setItem('user', JSON.stringify(user));
-        navigation.replace('BottomTabs');
-      } else {
-        Alert.alert('Erro', 'Credenciais inválidas!');
-      }
-    } catch (error) {
-      console.error('Erro inesperado no login:', error);
-      Alert.alert('Erro', 'Ocorreu um problema ao tentar fazer o login.');
-    }
-  };
+
 
   return (
     <View style={styles.container}>
@@ -69,7 +60,7 @@ const LoginForm = ({ navigation }: any) => {
       />
 
       {/* Link de Esqueceu a Senha */}
-      <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+      <TouchableOpacity onPress={() => navigation.navigate('ChangePassword')}>
         <Text style={styles.forgotPasswordText}>Esqueceu a sua senha?</Text>
       </TouchableOpacity>
 

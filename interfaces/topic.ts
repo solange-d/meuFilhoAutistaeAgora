@@ -23,5 +23,9 @@ export type RootStackParamList = {
   informationAndGuildeLiness: undefined;
   NewTopic: { setTopics: React.Dispatch<React.SetStateAction<Topic[]>> };
   TopicDetail: { topic: Topic };
-  DocumentDetail: { documentId: number }; 
+
+  DocumentDetail: { documentId: number };
+  AddDocument: undefined; 
+  EditDocument: { document: { id: number; name: string; dueDate: string; notes: string; } };
+
 };

@@ -1,20 +1,19 @@
 import { UserModel, isUserValid } from '../models/userModel';
 import {
-  deleteUser as deleteUserFromDb,
+
   getUserByEmailOrPhoneAndPassword,
-  getUserById as getUserFromDb,
   insertUser,
-  updateUser as updateUserInDb
+
 } from '../service/databaseService';
 
-export const registerUser = async (user: UserModel) => {
+export const registerUserRepo = async (user: UserModel) => {
   if (!isUserValid(user)) {
-    throw new Error('Dados inválidos!');
+    throw new Error('Dados de usuário inválidos!');
   }
   await insertUser(user);
 };
 
-export const loginUser = async (
+export const loginUserRepo = async (
   emailOrPhone: string,
   password: string
 ): Promise<UserModel | null> => {

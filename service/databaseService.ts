@@ -1,13 +1,14 @@
 import * as SQLite from 'expo-sqlite';
 import { UserModel } from '../models/userModel';
 
-export const getDbConnection = async () => {
-  return await SQLite.openDatabaseAsync('app.db');
-};
+let dbInstance: SQLite.SQLiteDatabase | null = null;
 
-export const initDB = async () => {
-  const db = await getDbConnection();
+const initDB = async () => {
+  if (dbInstance) return dbInstance;
+
+  const db = await SQLite.openDatabaseAsync('app.db');
   await db.execAsync(`
+    PRAGMA journal_mode = WAL;
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       fullName TEXT NOT NULL,
@@ -16,7 +17,21 @@ export const initDB = async () => {
       password TEXT,
       birthDate TEXT
     );
+    CREATE TABLE IF NOT EXISTS documents (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      userId INTEGER,
+      name TEXT NOT NULL,
+      dueDate TEXT,
+      notes TEXT,
+      FOREIGN KEY(userId) REFERENCES users(id)
+    );
   `);
+  dbInstance = db;
+  return dbInstance;
+};
+
+export const getDbConnection = async () => {
+  return dbInstance ?? (await initDB());
 };
 
 export const insertUser = async (user: UserModel) => {
@@ -39,28 +54,44 @@ export const getUserByEmailOrPhoneAndPassword = async (
   password: string
 ): Promise<UserModel | null> => {
   const db = await getDbConnection();
-  const result = await db.getFirstAsync(
+  const result = await db.getFirstAsync<UserModel>(
     `SELECT * FROM users WHERE (email = ? OR phone = ?) AND password = ?`,
     [emailOrPhone, emailOrPhone, password]
   );
-  return result ? (result as UserModel) : null;
+
+  return result ?? null;
 };
 
-export const getUserById = async (id: number): Promise<UserModel | null> => {
-  const db = await getDbConnection();
-  const result = await db.getFirstAsync('SELECT * FROM users WHERE id = ?', [id]);
-  return result ? (result as UserModel) : null;
-};
-
-export const updateUser = async (user: UserModel) => {
+export const insertDocument = async (doc: { userId: number; name: string; dueDate: string; notes: string; }) => {
   const db = await getDbConnection();
   await db.runAsync(
-    'UPDATE users SET fullName = ?, email = ?, phone = ?, birthDate = ? WHERE id = ?',
-    [user.fullName, user.email, user.phone, user.birthDate, user.id]
+    `INSERT INTO documents (userId, name, dueDate, notes) VALUES (?, ?, ?, ?)`,
+    [doc.userId, doc.name, doc.dueDate, doc.notes]
   );
 };
 
-export const deleteUser = async (id: number) => {
+export const getDocumentsByUserId = async (userId: number) => {
   const db = await getDbConnection();
-  await db.runAsync('DELETE FROM users WHERE id = ?', [id]);
+  const results = await db.getAllAsync('SELECT * FROM documents WHERE userId = ?', [userId]);
+  return results;
+};
+
+export const getDocumentById = async (id: number) => {
+  const db = await getDbConnection();
+  const result = await db.getFirstAsync('SELECT * FROM documents WHERE id = ?', [id]);
+  return result;
+};
+
+export const updateDocument = async (doc: { id: number; name: string; dueDate: string; notes: string; }) => {
+  const db = await getDbConnection();
+  await db.runAsync(
+    `UPDATE documents SET name = ?, dueDate = ?, notes = ? WHERE id = ?`,
+    [doc.name, doc.dueDate, doc.notes, doc.id]
+  );
+};
+
+export const deleteDocument = async (id: number) => {
+  const db = await getDbConnection();
+  await db.runAsync(`DELETE FROM documents WHERE id = ?`, [id]);
+
 };
