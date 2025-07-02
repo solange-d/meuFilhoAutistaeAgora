@@ -1,22 +1,53 @@
-import React, { useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View, Modal } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react';
+import {
+  Image,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import imgUsuario from '../../assets/images/img-usuario.png';
 import { Colors } from '../../constants/Colors';
+import { UserModel } from '../../models/userModel';
 
 const ProfileView = ({ navigation }: any) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const userName = 'Fulano'; // Substitua por nome real do usuário
+  const [user, setUser] = useState<UserModel | null>(null);
 
-  const handleLogout = () => {
+  useEffect(() => {
+    const fetchUser = async () => {
+      const storedUser = await AsyncStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    };
+    fetchUser();
+  }, []);
+
+  const handleLogout = async () => {
     setModalVisible(false);
-    navigation.replace('Login'); // Redireciona para tela de login
+    await AsyncStorage.removeItem('user');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Login' }],
+    });
   };
 
   const menuItems = [
     { label: 'Editar Perfil', icon: 'pencil-outline', screen: 'EditProfile' },
-    { label: 'Configurações', icon: 'settings-outline', screen: 'SettingsView' },
-    { label: 'Políticas de Privacidade', icon: 'lock-closed-outline', screen: 'PrivacyPolicy' },
+    {
+      label: 'Configurações',
+      icon: 'settings-outline',
+      screen: 'SettingsView',
+    },
+    {
+      label: 'Políticas de Privacidade',
+      icon: 'lock-closed-outline',
+      screen: 'PrivacyPolicy',
+    },
     { label: 'Sair', icon: 'exit-outline', action: () => setModalVisible(true) },
   ];
 
@@ -24,7 +55,7 @@ const ProfileView = ({ navigation }: any) => {
     <View style={styles.container}>
       <Text style={styles.title}>Meu Perfil</Text>
       <Image source={imgUsuario} style={styles.avatar} />
-      <Text style={styles.userName}>{userName}</Text>
+      <Text style={styles.userName}>{user?.fullName || 'Usuário'}</Text>
 
       <View style={styles.menu}>
         {menuItems.map(({ label, icon, screen, action }, index) => (
@@ -37,12 +68,15 @@ const ProfileView = ({ navigation }: any) => {
               <Icon name={icon} size={20} color={Colors.primary} />
             </View>
             <Text style={styles.menuText}>{label}</Text>
-            <Icon name="chevron-forward" size={20} color={Colors.textSecondary} />
+            <Icon
+              name="chevron-forward"
+              size={20}
+              color={Colors.textSecondary}
+            />
           </TouchableOpacity>
         ))}
       </View>
 
-      {/* Modal de Confirmação de Saída */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -52,7 +86,9 @@ const ProfileView = ({ navigation }: any) => {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Deseja sair?</Text>
-            <Text style={styles.modalText}>Você realmente quer sair do aplicativo?</Text>
+            <Text style={styles.modalText}>
+              Você realmente quer sair do aplicativo?
+            </Text>
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={[styles.button, styles.cancelButton]}
@@ -73,8 +109,6 @@ const ProfileView = ({ navigation }: any) => {
     </View>
   );
 };
-
-export default ProfileView;
 
 const styles = StyleSheet.create({
   container: {
@@ -139,7 +173,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: '80%',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.backgroundSecondary,
     borderRadius: 8,
     padding: 20,
     alignItems: 'center',
@@ -148,7 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: Colors.textPrimary,
+    color: Colors.primary,
   },
   modalText: {
     fontSize: 16,
@@ -175,7 +209,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
   },
   buttonText: {
-    color: '#fff',
+    color: Colors.textPrimary,
     fontWeight: 'bold',
   },
 });
+
+export default ProfileView;

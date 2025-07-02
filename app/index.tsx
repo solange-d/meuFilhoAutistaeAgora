@@ -24,53 +24,24 @@ import SettingsView from './views/settingsView';
 import SuportNetwork from './views/suportNetworkView';
 import TopicDetail from './views/topicDetailView';
 
-
 const Stack = createStackNavigator<RootStackParamList>();
 
-const AuthStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Onboarding" component={OnboardingView} />
-    <Stack.Screen name="Login" component={LoginView} />
-    <Stack.Screen name="LoginForm" component={LoginForm} />
-    <Stack.Screen name="RegisterForm" component={RegisterForm} />
-  </Stack.Navigator>
-);
-
-const AppStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="BottomTabs" component={BottomTabs} />
-    <Stack.Screen name="EditProfile" component={EditProfile} />
-    <Stack.Screen name="SettingsView" component={SettingsView} />
-    <Stack.Screen name="ChangePassword" component={ChangePassword} />
-    <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
-    <Stack.Screen name="SuportNetwork" component={SuportNetwork} />
-    <Stack.Screen name="RightsBenefits" component={RightsBenefits} />
-    <Stack.Screen name="Documents" component={Documents} />
-    <Stack.Screen name="informationAndGuildeLiness" component={informationAndGuildeLiness} />
-    <Stack.Screen name="NewTopic" component={NewTopic} />
-    <Stack.Screen name="TopicDetail" component={TopicDetail} />
-    <Stack.Screen name="DocumentDetail" component={DocumentDetailView} />
-    <Stack.Screen name="AddDocument" component={AddDocumentView} />
-    <Stack.Screen name="EditDocument" component={EditDocumentView} />
-  </Stack.Navigator>
-);
-
 export default function App() {
-  const [authState, setAuthState] = useState<'loading' | 'signedIn' | 'signedOut'>('loading');
+  const [initialRoute, setInitialRoute] = useState<'Onboarding' | 'BottomTabs' | null>(null);
 
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
         const user = await AsyncStorage.getItem('user');
-        setAuthState(user ? 'signedIn' : 'signedOut');
+        setInitialRoute(user ? 'BottomTabs' : 'Onboarding');
       } catch (e) {
-        setAuthState('signedOut'); 
+        setInitialRoute('Onboarding'); 
       }
     };
     checkLoginStatus();
   }, []);
 
-  if (authState === 'loading') {
+  if (!initialRoute) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', backgroundColor: Colors.background }}>
         <ActivityIndicator size="large" color={Colors.primary} />
@@ -78,5 +49,30 @@ export default function App() {
     );
   }
 
-  return authState === 'signedIn' ? <AppStack /> : <AuthStack />;
+  return (
+    <Stack.Navigator
+      initialRouteName={initialRoute}
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="Onboarding" component={OnboardingView} />
+      <Stack.Screen name="Login" component={LoginView} />
+      <Stack.Screen name="LoginForm" component={LoginForm} />
+      <Stack.Screen name="RegisterForm" component={RegisterForm} />
+      
+      <Stack.Screen name="BottomTabs" component={BottomTabs} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="SettingsView" component={SettingsView} />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+      <Stack.Screen name="SuportNetwork" component={SuportNetwork} />
+      <Stack.Screen name="RightsBenefits" component={RightsBenefits} />
+      <Stack.Screen name="Documents" component={Documents} />
+      <Stack.Screen name="informationAndGuildeLiness" component={informationAndGuildeLiness} />
+      <Stack.Screen name="NewTopic" component={NewTopic} />
+      <Stack.Screen name="TopicDetail" component={TopicDetail} />
+      <Stack.Screen name="DocumentDetail" component={DocumentDetailView} />
+      <Stack.Screen name="AddDocument" component={AddDocumentView} />
+      <Stack.Screen name="EditDocument" component={EditDocumentView} />
+    </Stack.Navigator>
+  );
 }

@@ -12,6 +12,7 @@ export type RootStackParamList = {
   Login: undefined;
   LoginForm: undefined;
   RegisterForm: undefined;
+  AppNavigator: undefined;
   BottomTabs: undefined;
   EditProfile: undefined;
   SettingsView: undefined;

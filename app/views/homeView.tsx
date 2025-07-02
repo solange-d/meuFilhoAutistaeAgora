@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Image,
   ScrollView,
@@ -13,10 +14,21 @@ import imgPrincipal from '../../assets/images/img-principal.png';
 import imgUsuario from '../../assets/images/img-usuario.png';
 import { Colors } from '../../constants/Colors';
 import { UserModel } from '../../models/userModel';
+import { fetchDocumentsForUser } from '../../repository/DocumentRepository';
+
+interface Document {
+  id: number;
+  name: string;
+  dueDate: string;
+  notes: string;
+}
 
 const HomeView = ({ navigation }: any) => {
   const [user, setUser] = useState<UserModel | null>(null);
   const [greeting, setGreeting] = useState('');
+  
+  const [nextDueDate, setNextDueDate] = useState<Date | null>(null);
+  const [nextDueDocumentName, setNextDueDocumentName] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,57 +38,88 @@ const HomeView = ({ navigation }: any) => {
       }
     };
     fetchUser();
-  }, []);
 
-  useEffect(() => {
     const hour = new Date().getHours();
     if (hour < 12) setGreeting('Bom dia');
     else if (hour < 18) setGreeting('Boa tarde');
     else setGreeting('Boa noite');
   }, []);
 
-  const dueDate = new Date('2025-03-09T00:00:00');
-  const currentDate = new Date();
-  const timeDiff = dueDate.getTime() - currentDate.getTime();
-  const daysUntilDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  useFocusEffect(
+    useCallback(() => {
+      const loadUpcomingDueDate = async () => {
+        const userString = await AsyncStorage.getItem('user');
+        if (!userString) return;
+
+        const currentUser = JSON.parse(userString);
+        const documents = (await fetchDocumentsForUser(currentUser.id)) as Document[];
+        
+        let closestDate: Date | null = null;
+        let closestDocName: string | null = null;
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+
+        documents.forEach(doc => {
+          if (doc.dueDate) {
+            const cleanedDate = doc.dueDate.replace(/\D/g, '');
+            if (cleanedDate.length === 8) {
+              const day = parseInt(cleanedDate.substring(0, 2), 10);
+              const month = parseInt(cleanedDate.substring(2, 4), 10);
+              const year = parseInt(cleanedDate.substring(4, 8), 10);
+              
+              const date = new Date(year, month - 1, day);
+
+              if (!isNaN(date.getTime()) && date >= now) {
+                if (!closestDate || date < closestDate) {
+                  closestDate = date;
+                  closestDocName = doc.name; 
+                }
+              }
+            }
+          }
+        });
+        setNextDueDate(closestDate);
+        setNextDueDocumentName(closestDocName); 
+      };
+
+      loadUpcomingDueDate();
+    }, [])
+  );
 
   const renderDocumentStatus = () => {
-    const absoluteDays = Math.abs(daysUntilDue);
+    if (!nextDueDate || !nextDueDocumentName) {
+      return (
+        <Text style={styles.cardDescription}>
+          Nenhum documento com vencimento próximo.
+        </Text>
+      );
+    }
+    
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    const timeDiff = nextDueDate.getTime() - currentDate.getTime();
+    const daysUntilDue = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
     return (
       <>
         <View style={styles.daysContainer}>
-          <Text style={styles.daysNumber}>{absoluteDays}</Text>
+          <Text style={styles.daysNumber}>{daysUntilDue}</Text>
           <Text style={styles.daysLabel}>
-            {absoluteDays === 1 ? 'dia' : 'dias'}
+            {daysUntilDue === 1 ? 'dia' : 'dias'}
           </Text>
         </View>
-
-        {daysUntilDue > 0 && (
-          <Text style={styles.cardDescription}>
-            Faltantes para o vencimento da carteirinha de identificação.
-          </Text>
-        )}
-
-        {daysUntilDue === 0 && (
-          <Text style={styles.cardDescription}>
-            Seu documento <Text style={{ fontWeight: 'bold' }}>vence hoje</Text>!
-          </Text>
-        )}
-
-        {daysUntilDue < 0 && (
-          <Text style={styles.cardDescription}>
-            Sua carteirinha de identificação{' '}
-            <Text style={{ fontWeight: 'bold' }}>venceu</Text>.
-          </Text>
-        )}
+        
+        <Text style={styles.cardDescription}>
+          Para o vencimento de: 
+          <Text style={{ fontWeight: 'bold' }}> {nextDueDocumentName}</Text>
+        </Text>
       </>
     );
   };
 
   return (
     <ScrollView style={styles.container}>
-      {/* Cabeçalho */}
       <View style={styles.header}>
         <View style={styles.userInfo}>
           <Image source={imgUsuario} style={styles.avatar} />
@@ -87,7 +130,7 @@ const HomeView = ({ navigation }: any) => {
           </Text>
         </View>
         <View style={styles.icons}>
-          <TouchableOpacity onPress={() => navigation.navigate('Notificações')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Notifications')}>
             <Icon
               name="notifications-outline"
               size={24}
@@ -106,7 +149,7 @@ const HomeView = ({ navigation }: any) => {
         </View>
       </View>
 
-      {/* Card de Contagem Regressiva */}
+
       <View style={styles.card}>
         {renderDocumentStatus()}
         <TouchableOpacity
@@ -116,8 +159,7 @@ const HomeView = ({ navigation }: any) => {
           <Text style={styles.cardButtonText}>Acessar Documentos</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Botões Estilo Card */}
+      
       <View style={styles.buttonGrid}>
         <TouchableOpacity
           style={styles.cardButtonItem}
@@ -145,15 +187,12 @@ const HomeView = ({ navigation }: any) => {
         </TouchableOpacity>
       </View>
 
-      {/* Mini Logo do App */}
       <View style={styles.footer}>
         <Image source={imgPrincipal} style={styles.footerImage} resizeMode="contain" />
       </View>
     </ScrollView>
   );
 };
-
-export default HomeView;
 
 const styles = StyleSheet.create({
   container: {
@@ -240,11 +279,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   cardButtonItem: {
-    width: 160,
-    height: 80,
+    width: '48%',
+    aspectRatio: 2 / 1,
     backgroundColor: Colors.primary,
     borderRadius: 15,
-    padding: 20,
+    padding: 15,
     marginBottom: 16,
     elevation: 2,
     justifyContent: 'center',
@@ -257,7 +296,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     alignItems: 'center',
-    marginTop: 60,
+    marginTop: 40,
     marginBottom: 30,
   },
   footerImage: {
@@ -265,3 +304,5 @@ const styles = StyleSheet.create({
     height: 80,
   },
 });
+
+export default HomeView;

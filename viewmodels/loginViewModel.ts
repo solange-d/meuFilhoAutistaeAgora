@@ -20,7 +20,12 @@ export const useLoginViewModel = (
       const user = await loginUserRepo(emailOrPhone, password);
       if (user) {
         await AsyncStorage.setItem('user', JSON.stringify(user));
-        navigation.replace('BottomTabs');
+        
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'BottomTabs' }],
+        });
+
       } else {
         Alert.alert('Erro', 'Credenciais inválidas!');
       }
