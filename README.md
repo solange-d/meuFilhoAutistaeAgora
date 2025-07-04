@@ -1,50 +1,56 @@
-# Welcome to your Expo app 👋
+```markdown
+# 🧩 Meu Filho é Autista. E Agora? App de suporte para famílias após o diagnóstico de autismo.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Este aplicativo tem como objetivo **auxiliar familiares que receberam o diagnóstico de autismo de seus filhos**, oferecendo informações confiáveis, acesso a direitos legais, apoio emocional e uma rede de suporte comunitária. Tudo isso de forma acessível e prática no seu dispositivo móvel.
 
-## Get started
+## 🚀 Funcionalidades principais
 
-1. Install dependencies
+- 📚 Informações e orientações sobre o autismo  
+- 🏛️ Acesso a direitos e benefícios legais  
+- 🗂️ Gerenciamento de documentos (alerta sobre vencimentos e prazos)  
+- 🫂 Rede de apoio (fórum com tópicos e comentários entre usuários)  
+- 📅 Calendário de eventos integrados com o Google Calendar, com filtro por localização  
 
+## 🛠️ Tecnologias utilizadas
+
+- [Expo](https://expo.dev/)  
+- React Native   
+- Banco de dados local com SQLite  
+- Arquitetura MVVM  
+
+## 📦 Como executar o projeto
+
+1. Clone o repositório:
+   ```bash
+   git clone <URL-do-repositório>
+   cd nome-do-projeto
+   ```
+
+2. Instale o Expo CLI (se ainda não tiver):
+   ```bash
+   npm install -g expo
+   ```
+
+3. Instale as dependências do projeto:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+4. Inicie o projeto:
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+5. Para testar no celular:
+   - Instale o aplicativo **Expo Go**:  
+     [📲 Expo Go na Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent)
+   - Abra o Expo Go, escolha “Scan QR Code” e escaneie o QR exibido no terminal
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+6. Navegue pelas telas iniciais até a opção **"Vamos Começar"**
+   - Faça seu cadastro  
+   - Realize o login  
+   - Pronto! Explore os recursos e funcionalidades disponíveis 🎉
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
 ```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
