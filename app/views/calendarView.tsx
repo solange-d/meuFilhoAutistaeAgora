@@ -4,7 +4,7 @@ import { getDistance } from 'geolib';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { Colors } from '../../constants/Colors';
-import { fetchGoogleCalendarEvents } from '../../Service/googleCalendarService';
+import { fetchGoogleCalendarEvents } from '../../service/googleCalendarService';
 import DistanceSlider from '../components/DistanceSlider';
 
 export default function CalendarView() {
