@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { Alert } from 'react-native';
 import { RootStackParamList } from '../interfaces/topic';
-import { loginUser } from '../repository/UserRepository';
+import { loginUserRepo } from '../repository/UserRepository';
 
 export const useLoginViewModel = (
   navigation: NativeStackNavigationProp<RootStackParamList>
@@ -16,27 +16,24 @@ export const useLoginViewModel = (
       Alert.alert('Atenção', 'Por favor, preencha todos os campos.');
       return;
     }
-
     try {
-      const user = await loginUser(emailOrPhone, password);
-
+      const user = await loginUserRepo(emailOrPhone, password);
       if (user) {
         await AsyncStorage.setItem('user', JSON.stringify(user));
-        navigation.replace('Home'); 
+        
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'BottomTabs' }],
+        });
+
       } else {
         Alert.alert('Erro', 'Credenciais inválidas!');
       }
-    } catch (error) {
-      console.error('Erro inesperado no login:', error);
-      Alert.alert('Erro', 'Ocorreu um problema ao tentar fazer o login. Tente novamente.');
+    } catch (error: any) {
+      console.error('Erro detalhado no login:', error);
+      Alert.alert('Erro', 'Ocorreu um problema ao tentar fazer o login.');
     }
   };
 
-  return {
-    emailOrPhone,
-    setEmailOrPhone,
-    password,
-    setPassword,
-    handleLogin,
-  };
+  return { emailOrPhone, setEmailOrPhone, password, setPassword, handleLogin };
 };
